@@ -56,6 +56,35 @@ if os.getenv("SESSION_COOKIE_SECURE", "").lower() in {"1", "true", "yes"}:
     app.config["SESSION_COOKIE_SECURE"] = True
 
 _station_cache = {}
+_financial_entity_cache = {}
+
+FINANCIAL_ENTITY_SOURCE = "https://www.datos.gov.co/resource/sr9n-792w.json"
+SFC_ENTITY_SOURCE = "https://www.superfinanciera.gov.co/publicaciones/61694/industrias-supervisadasentidades-vigiladas-por-la-superintendencia-financiera-de-colombialista-general-de-entidades-vigiladas-por-la-superintendencia-financiera-de-colombia-61694/"
+SFC_CATEGORY_SOURCE = "https://www.superfinanciera.gov.co/publicaciones/13067/industrias-supervisadasentidades-vigiladas-por-la-superintendencia-financiera-de-colombia-13067/"
+FINANCIAL_TYPE_LABELS = {
+    "1": "Bancos",
+    "2": "Corporaciones financieras",
+    "4": "Companias de financiamiento",
+    "22": "Instituciones oficiales especiales",
+    "32": "Cooperativas financieras",
+    "118": "Sistemas de pago de bajo valor",
+    "128": "SEDPE y billeteras digitales",
+}
+FINANCIAL_TYPE_ORDER = ["1", "4", "32", "2", "22", "128", "118"]
+FALLBACK_FINANCIAL_ENTITIES = [
+    {"type": "1", "name": "BANCOLOMBIA S.A.", "city": "MEDELLIN", "website": "www.bancolombia.com.co"},
+    {"type": "1", "name": "BANCO DE BOGOTA S.A.", "city": "BOGOTA D.C.", "website": "www.bancodebogota.com.co"},
+    {"type": "1", "name": "BANCO DAVIVIENDA S.A.", "city": "BOGOTA D.C.", "website": "www.davivienda.com"},
+    {"type": "1", "name": "BANCO DE OCCIDENTE S.A.", "city": "CALI", "website": "www.bancodeoccidente.com.co"},
+    {"type": "1", "name": "BANCO BBVA COLOMBIA S.A.", "city": "BOGOTA D.C.", "website": "www.bbva.com.co"},
+    {"type": "1", "name": "BANCO AGRARIO DE COLOMBIA S.A.", "city": "BOGOTA D.C.", "website": "www.bancoagrario.gov.co"},
+    {"type": "4", "name": "GM FINANCIAL COLOMBIA S.A. COMPANIA DE FINANCIAMIENTO", "city": "BOGOTA D.C.", "website": "www.gmfinancial.com.co"},
+    {"type": "4", "name": "FINANZAUTO S.A. COMPANIA DE FINANCIAMIENTO", "city": "BOGOTA D.C.", "website": "www.finanzauto.com.co"},
+    {"type": "4", "name": "RCI COLOMBIA S.A. COMPANIA DE FINANCIAMIENTO", "city": "BOGOTA D.C.", "website": "www.rcicolombia.com.co"},
+    {"type": "32", "name": "COOPERATIVA FINANCIERA DE ANTIOQUIA CFA", "city": "MEDELLIN", "website": "www.cfa.com.co"},
+    {"type": "32", "name": "CONFIAR COOPERATIVA FINANCIERA", "city": "MEDELLIN", "website": "www.confiar.coop"},
+    {"type": "128", "name": "MOVII S.A. SOCIEDAD ESPECIALIZADA EN DEPOSITOS Y PAGOS ELECTRONICOS", "city": "BOGOTA D.C.", "website": "www.movii.com.co"},
+]
 
 
 def compute_asset_version():
@@ -503,6 +532,72 @@ def recommendations(profile):
     return sorted(ranked, key=lambda x: x["fit_score"], reverse=True)[:4]
 
 
+def entity_display_name(name):
+    text = re.sub(r"\s+", " ", clean_text(name))
+    text = re.split(r"\s+(?:pero\s+podr[aá]|podr[aá]|pudiendo|en adelante|es una sociedad|la cual)", text, flags=re.I)[0]
+    text = text.replace("COMPAÑÍA", "COMPANIA")
+    return text[:96].rstrip(" ,.-")
+
+
+def website_url(value):
+    web = clean_text(value)
+    if not web or normalize_key(web) == "pendiente":
+        return ""
+    return web if web.startswith(("http://", "https://")) else f"https://{web}"
+
+
+def normalize_financial_entity(row):
+    entity_type = clean_text(row.get("tipo_entidad") or row.get("type"))
+    return {
+        "type": entity_type,
+        "type_label": FINANCIAL_TYPE_LABELS.get(entity_type, "Entidad financiera"),
+        "name": entity_display_name(row.get("razon_social") or row.get("name")),
+        "city": clean_text(row.get("ciudad") or row.get("city")) or "-",
+        "website": website_url(row.get("uripaginaweb") or row.get("website")),
+    }
+
+
+def financial_entities():
+    cached = _financial_entity_cache.get("payload")
+    if cached and cached["expires"] > time.time():
+        return cached["data"]
+    rows = []
+    source_label = "Datos abiertos SFC via datos.gov.co"
+    try:
+        response = requests.get(
+            FINANCIAL_ENTITY_SOURCE,
+            params={"$limit": 5000},
+            timeout=6,
+            headers={"User-Agent": "CarTrust Colombia/1.0"},
+        )
+        response.raise_for_status()
+        raw_rows = response.json()
+        rows = [
+            normalize_financial_entity(row)
+            for row in raw_rows
+            if clean_text(row.get("tipo_entidad")) in FINANCIAL_TYPE_LABELS
+        ]
+    except requests.RequestException:
+        source_label = "Base local CarTrust; confirmar en la SFC antes de contratar"
+        rows = [normalize_financial_entity(row) for row in FALLBACK_FINANCIAL_ENTITIES]
+    rows = sorted(rows, key=lambda x: (FINANCIAL_TYPE_ORDER.index(x["type"]) if x["type"] in FINANCIAL_TYPE_ORDER else 99, x["name"]))
+    grouped = []
+    for code in FINANCIAL_TYPE_ORDER:
+        items = [row for row in rows if row["type"] == code]
+        if items:
+            grouped.append({"code": code, "label": FINANCIAL_TYPE_LABELS[code], "entities": items, "count": len(items)})
+    data = {
+        "entities": rows,
+        "groups": grouped,
+        "source_label": source_label,
+        "source_url": SFC_ENTITY_SOURCE,
+        "category_url": SFC_CATEGORY_SOURCE,
+        "updated_label": "SFC: lista general modificada el 05/08/2026; categorias modificadas el 08/07/2026.",
+    }
+    _financial_entity_cache["payload"] = {"expires": time.time() + 24 * 60 * 60, "data": data}
+    return data
+
+
 def chat_budget(message):
     text = normalize_key(message)
     if "mil millones" in text or "1000 millones" in text:
@@ -938,6 +1033,17 @@ def contact(listing_id):
 def advisor():
     featured = [serialize(row) for row in query_listings({}, limit=3)]
     return render_template("advisor.html", featured=featured)
+
+
+@app.route("/chat-ia")
+def chat_ai():
+    featured = [serialize(row) for row in query_listings({}, limit=3)]
+    return render_template("chat_ai.html", featured=featured)
+
+
+@app.route("/simuladores")
+def simulators():
+    return render_template("simulators.html", financial_data=financial_entities())
 
 
 @app.route("/preview-web")

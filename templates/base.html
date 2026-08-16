@@ -21,6 +21,8 @@
       </form>
       <nav class="header-nav">
         <a href="{{ url_for('advisor') }}">Asesor</a>
+        <a href="{{ url_for('chat_ai') }}">Chat IA</a>
+        <a href="{{ url_for('simulators') }}">Simular</a>
         <a href="{{ url_for('charging') }}">Carga EV</a>
         <a href="{{ url_for('references') }}">Precios</a>
         {% if current_user %}

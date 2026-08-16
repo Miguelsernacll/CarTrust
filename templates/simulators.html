@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Simuladores y financiación | CarTrust{% endblock %}
+
+{% block content %}
+<section class="tool-page">
+  <div class="tool-hero">
+    <div>
+      <span class="eyebrow">Centro financiero CarTrust</span>
+      <h1>Simula cuota, costo total y posibles entidades antes de separar el carro.</h1>
+      <p>Herramientas orientativas para comparar escenarios. Las tasas y aprobaciones reales dependen de cada entidad, perfil de riesgo, estudio de crédito y documentos del comprador.</p>
+    </div>
+    <div class="tool-actions">
+      <a class="btn secondary" href="{{ url_for('chat_ai') }}"><i data-lucide="sparkles"></i> Preguntar al chat</a>
+      <a class="btn quiet" href="{{ url_for('index') }}#catalogo">Volver al catalogo</a>
+    </div>
+  </div>
+
+  <section class="finance-lab tool-lab" data-base-price="120000000">
+    <details class="tool-disclosure" open>
+      <summary><span>Simulador de crédito</span><i data-lucide="credit-card"></i></summary>
+      <form id="creditSimulator" class="finance-card expanded-tool">
+        <div class="tool-head">
+          <i data-lucide="credit-card"></i>
+          <div><strong>Crédito vehicular estimado</strong><span>Cuota fija, plazo y tasa mensual editable.</span></div>
+        </div>
+        <label>Entidad o canal de referencia
+          <select id="creditEntity">
+            <option value="1.65" selected>Bancolombia / Sufi - referencia editable</option>
+            <option value="1.70">Banco tradicional - referencia editable</option>
+            <option value="1.85">Compañía de financiamiento - referencia editable</option>
+            <option value="1.55">Cooperativa financiera - referencia editable</option>
+            <option value="1.95">Financiación de marca / concesionario - referencia editable</option>
+          </select>
+        </label>
+        <div class="field-pair">
+          <label>Valor del vehiculo<input id="creditPrice" inputmode="numeric" value="120000000"></label>
+          <label>Cuota inicial<input id="creditDown" inputmode="numeric" value="24000000"></label>
+        </div>
+        <div class="field-pair">
+          <label>Plazo<select id="creditTerm"><option value="36">36 meses</option><option value="48">48 meses</option><option value="60" selected>60 meses</option><option value="72">72 meses</option></select></label>
+          <label>Tasa MV editable<input id="creditRate" inputmode="decimal" value="1.65"></label>
+        </div>
+        <div class="sim-result">
+          <span>Monto a financiar</span><strong id="financeAmount">$0</strong>
+          <span>Cuota mensual estimada</span><strong id="financePayment">$0</strong>
+          <span>Ingreso sugerido aprox.</span><strong id="financeIncome">$0</strong>
+        </div>
+        <small>No es oferta bancaria. La tasa real debe confirmarse con la entidad financiera o pasarela aliada.</small>
+      </form>
+    </details>
+
+    <details class="tool-disclosure">
+      <summary><span>Costo total mensual</span><i data-lucide="badge-dollar-sign"></i></summary>
+      <form id="ownershipSimulator" class="finance-card expanded-tool">
+        <div class="tool-head">
+          <i data-lucide="badge-dollar-sign"></i>
+          <div><strong>Costo total de propiedad</strong><span>Cuota + seguro + SOAT + impuesto + uso diario.</span></div>
+        </div>
+        <div class="field-pair">
+          <label>SOAT anual<input id="tcoSoat" inputmode="numeric" value="1200000"></label>
+          <label>Seguro todo riesgo anual (%)<input id="tcoInsurance" inputmode="decimal" value="4.2"></label>
+        </div>
+        <div class="field-pair">
+          <label>Mantenimiento mensual<input id="tcoMaintenance" inputmode="numeric" value="350000"></label>
+          <label>Combustible/carga mensual<input id="tcoFuel" inputmode="numeric" value="520000"></label>
+        </div>
+        <label>Impuesto vehicular anual<input id="tcoTax" inputmode="numeric" value="1100000"></label>
+        <div class="sim-result strong">
+          <span>Costo mensual de tenerlo</span><strong id="ownershipMonthly">$0</strong>
+          <span>Costo anual estimado</span><strong id="ownershipAnnual">$0</strong>
+        </div>
+        <small>Incluye la cuota estimada del simulador de crédito. Ajusta valores según cotización real.</small>
+      </form>
+    </details>
+
+    <details class="tool-disclosure" open>
+      <summary><span>Bancos y entidades financieras</span><i data-lucide="building-2"></i></summary>
+      <div class="finance-directory">
+        <div class="directory-copy">
+          <span class="eyebrow">Fuente oficial</span>
+          <h2>Entidades para mapear alianzas, cotizaciones y pagos digitales.</h2>
+          <p>{{ financial_data.updated_label }} CarTrust muestra entidades útiles para financiación y pagos; antes de contratar, confirma condiciones, vigilancia y autorización directamente con la entidad.</p>
+          <div class="finance-links">
+            <a href="{{ financial_data.source_url }}" target="_blank" rel="noreferrer">Lista SFC completa</a>
+            <a href="{{ financial_data.category_url }}" target="_blank" rel="noreferrer">Categorías SFC</a>
+            <a href="https://www.datos.gov.co/Hacienda-y-Cr-dito-P-blico/Entidades-vigiladas-por-la-Superfinanciera/sr9n-792w" target="_blank" rel="noreferrer">Datos abiertos</a>
+          </div>
+        </div>
+        <div class="directory-filters">
+          <label>Buscar entidad<input id="entitySearch" placeholder="Ej: Bancolombia, Davivienda, Finandina"></label>
+          <label>Tipo de entidad
+            <select id="entityTypeFilter">
+              <option value="all">Todas las categorias</option>
+              {% for group in financial_data.groups %}
+                <option value="{{ group.code }}">{{ group.label }} ({{ group.count }})</option>
+              {% endfor %}
+            </select>
+          </label>
+        </div>
+        <div class="entity-summary">
+          {% for group in financial_data.groups %}
+            <button type="button" data-entity-type="{{ group.code }}"><strong>{{ group.count }}</strong><span>{{ group.label }}</span></button>
+          {% endfor %}
+        </div>
+        <div class="entity-list" id="financialEntityList" data-source="{{ financial_data.source_label }}">
+          {% for group in financial_data.groups %}
+            {% for entity in group.entities %}
+              <article class="entity-card" data-entity-card data-type="{{ entity.type }}" data-search="{{ (entity.name ~ ' ' ~ entity.city ~ ' ' ~ entity.type_label)|lower }}">
+                <strong>{{ entity.name }}</strong>
+                <span>{{ entity.type_label }} · {{ entity.city }}</span>
+                {% if entity.website %}
+                  <a href="{{ entity.website }}" target="_blank" rel="noreferrer">Sitio web</a>
+                {% else %}
+                  <small>Sitio web no reportado</small>
+                {% endif %}
+              </article>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+    </details>
+  </section>
+</section>
+{% endblock %}

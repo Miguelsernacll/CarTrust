@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Chat IA | CarTrust{% endblock %}
+
+{% block content %}
+<section class="tool-page">
+  <div class="tool-hero">
+    <div>
+      <span class="eyebrow">Chat IA CarTrust</span>
+      <h1>Describe tu compra y deja que CarTrust filtre por ti.</h1>
+      <p>Para quien no quiere responder el test: escribe presupuesto, uso, personas, ciudad, viajes o carga EV. El chat convierte ese texto en un perfil y recomienda carros activos.</p>
+    </div>
+    <div class="tool-actions">
+      <a class="btn secondary" href="{{ url_for('advisor') }}"><i data-lucide="list-checks"></i> Usar test completo</a>
+      <a class="btn quiet" href="{{ url_for('index') }}#catalogo">Ver catalogo</a>
+    </div>
+  </div>
+
+  <details class="tool-disclosure" open>
+    <summary><span>Chat recomendado</span><i data-lucide="sparkles"></i></summary>
+    <section class="chat-advisor tool-chat">
+      <div class="chat-copy">
+        <span class="eyebrow">Sin formulario largo</span>
+        <h2>Habla como comprador, no como formulario.</h2>
+        <p>Ejemplos utiles: presupuesto maximo, cuota mensual ideal, si tienes familia, si viajas, si quieres EV o si necesitas bajo consumo.</p>
+        <div class="chat-examples" aria-label="Ejemplos para el chat">
+          <button type="button" data-chat-prompt="Tengo 120 millones, familia de 4, quiero SUV segura para viajar.">Familia y viajes</button>
+          <button type="button" data-chat-prompt="Busco algo economico para Medellin, bajo consumo, maximo 80 millones.">Ciudad economica</button>
+          <button type="button" data-chat-prompt="Quiero electrico, tengo carga en casa y presupuesto de 180 millones.">Electrico con carga</button>
+        </div>
+      </div>
+      <div class="chat-panel" data-chat-panel>
+        <div id="chatMessages" class="chat-messages" aria-live="polite">
+          <div class="chat-bubble bot">Hola, soy el asesor CarTrust. Dime presupuesto, uso y cuantas personas van normalmente.</div>
+        </div>
+        <form id="chatAdvisorForm" class="chat-form">
+          <input id="chatAdvisorInput" autocomplete="off" placeholder="Ej: SUV hasta 120 millones, familia de 4, segura">
+          <button class="btn primary" type="submit"><i data-lucide="sparkles"></i> Recomendar</button>
+        </form>
+        <div id="chatRecommendations" class="chat-recommendations"></div>
+      </div>
+    </section>
+  </details>
+
+  {% if featured %}
+    <section class="mini-market">
+      <div class="section-head">
+        <div><span class="eyebrow">Para probar el chat</span><h2>Carros activos que puede recomendar.</h2></div>
+      </div>
+      <div class="recommendation-list">
+        {% for item in featured %}
+          <article class="recommendation-card">
+            <a href="{{ url_for('detail', listing_id=item.id) }}"><img src="{{ item.image_url }}" alt="{{ item.title }}"></a>
+            <div>
+              <strong>{{ item.price_formatted }}</strong>
+              <h3>{{ item.title }}</h3>
+              <a class="btn secondary full" href="{{ url_for('detail', listing_id=item.id) }}">Ver ficha</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</section>
+{% endblock %}

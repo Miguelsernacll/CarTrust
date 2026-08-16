@@ -161,6 +161,7 @@ function initFinanceTools() {
   const downInput = document.querySelector("#creditDown");
   const termInput = document.querySelector("#creditTerm");
   const rateInput = document.querySelector("#creditRate");
+  const entityInput = document.querySelector("#creditEntity");
   const soatInput = document.querySelector("#tcoSoat");
   const insuranceInput = document.querySelector("#tcoInsurance");
   const maintenanceInput = document.querySelector("#tcoMaintenance");
@@ -195,7 +196,45 @@ function initFinanceTools() {
     input?.addEventListener("input", calculate);
     input?.addEventListener("change", calculate);
   });
+  entityInput?.addEventListener("change", () => {
+    rateInput.value = entityInput.value;
+    calculate();
+  });
   calculate();
+}
+
+function initEntityDirectory() {
+  const list = document.querySelector("#financialEntityList");
+  const search = document.querySelector("#entitySearch");
+  const type = document.querySelector("#entityTypeFilter");
+  const quickFilters = document.querySelectorAll("[data-entity-type]");
+  if (!list || !search || !type) return;
+  const cards = [...list.querySelectorAll("[data-entity-card]")];
+
+  function paint() {
+    const query = search.value.trim().toLowerCase();
+    const selected = type.value;
+    let visible = 0;
+    cards.forEach((card) => {
+      const matchesType = selected === "all" || card.dataset.type === selected;
+      const matchesSearch = !query || card.dataset.search.includes(query);
+      const show = matchesType && matchesSearch;
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+    list.dataset.visible = String(visible);
+  }
+
+  search.addEventListener("input", paint);
+  type.addEventListener("change", paint);
+  quickFilters.forEach((button) => {
+    button.addEventListener("click", () => {
+      type.value = button.dataset.entityType || "all";
+      paint();
+      list.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+  paint();
 }
 
 function esc(value) {
@@ -643,6 +682,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initButtonFeedback();
   initHeroShowcase();
   initFinanceTools();
+  initEntityDirectory();
   initRoleFields();
   initChatAdvisor();
   initFilters();
