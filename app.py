@@ -381,6 +381,138 @@ POPULAR_SOURCE_LINKS = [
     },
 ]
 
+MARKET_NEIGHBORHOODS = [
+    "Laureles",
+    "El Poblado",
+    "Belen",
+    "Itagui",
+    "Sabaneta",
+    "Las Palmas",
+    "Envigado",
+    "Ciudad del Rio",
+    "Los Colores",
+    "Robledo",
+]
+
+BODY_IMAGE_URLS = {
+    "Hatchback": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1200&q=80",
+    "Sedan": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80",
+    "SUV": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1200&q=80",
+    "Pickup": "https://images.unsplash.com/photo-1551830820-330a71b99659?auto=format&fit=crop&w=1200&q=80",
+    "Camion": "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=1200&q=80",
+    "Van": "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80",
+}
+
+
+def market_price(make, body, fuel, year, rank):
+    base_by_body = {
+        "Hatchback": 52_000_000,
+        "Sedan": 74_000_000,
+        "SUV": 122_000_000,
+        "Pickup": 138_000_000,
+        "Camion": 118_000_000,
+        "Van": 170_000_000,
+    }
+    brand_factor = {
+        "Toyota": 1.22,
+        "Mazda": 1.12,
+        "BYD": 1.24,
+        "Ford": 1.14,
+        "Kia": 1.04,
+        "Nissan": 1.06,
+        "Volkswagen": 1.08,
+        "Hyundai": 1.02,
+    }.get(make, 1)
+    fuel_factor = {"Electrico": 1.28, "Hibrido": 1.16, "Diesel": 1.08}.get(fuel, 1)
+    age_factor = max(.38, 1 - max(0, 2026 - year) * .052)
+    price = base_by_body.get(body, 90_000_000) * brand_factor * fuel_factor * age_factor
+    price += (rank % 19) * 1_650_000
+    return int(min(1_000_000_000, max(26_000_000, round(price / 100_000) * 100_000)))
+
+
+def market_mileage(year, rank):
+    age = max(0, 2026 - year)
+    return max(1_200, age * 10_700 + (rank % 37) * 830)
+
+
+def market_transmission(fuel, rank):
+    if fuel in {"Electrico", "Hibrido"}:
+        return "Automatica"
+    return "Manual" if rank % 6 == 0 else "Automatica"
+
+
+def market_scores(body, fuel, rank):
+    safety = min(96, 68 + (rank % 24))
+    economy = min(96, 62 + (rank % 20) + (12 if fuel in {"Electrico", "Hibrido"} else 0))
+    family = min(96, 64 + (rank % 18) + (8 if body in {"SUV", "Van"} else 0))
+    performance = min(96, 60 + (rank % 26) + (5 if body in {"Pickup", "SUV"} else 0))
+    comfort = min(96, 64 + (rank % 24))
+    cargo = min(96, 58 + (rank % 25) + (12 if body in {"Pickup", "SUV", "Van", "Camion"} else 0))
+    return safety, economy, family, performance, comfort, cargo
+
+
+def seed_marketplace_inventory(conn):
+    active_total = conn.execute("SELECT COUNT(*) total FROM listings WHERE status = 'active'").fetchone()["total"]
+    if active_total >= 1000:
+        return
+    existing_titles = {
+        row["title"]
+        for row in conn.execute("SELECT title FROM listings WHERE status = 'active'").fetchall()
+    }
+    now = utc_iso()
+    rows_needed = 1000 - active_total
+    inserted = 0
+    for rank, make, model, year, title, body, fuel, _score, _note, _source in build_popular_vehicle_rows():
+        if inserted >= rows_needed:
+            break
+        listing_title = title
+        suffix = 2
+        while listing_title in existing_titles:
+            listing_title = f"{title} Serie {suffix}"
+            suffix += 1
+        dealer_name, dealer_phone, dealer_nit = REFERRED_DEALERS[(rank - 1) % len(REFERRED_DEALERS)]
+        safety, economy, family, performance, comfort, cargo = market_scores(body, fuel, rank)
+        cur = conn.execute(
+            """
+            INSERT INTO listings
+            (title, make, model, year, price, mileage, city, neighborhood, dealer_name,
+             dealer_phone, dealer_nit, body_type, fuel_type, transmission, seats, verified,
+             safety_score, economy_score, family_score, performance_score, comfort_score,
+             cargo_score, description, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, 'Medellin', ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                listing_title,
+                make,
+                model,
+                year,
+                market_price(make, body, fuel, year, rank),
+                market_mileage(year, rank),
+                MARKET_NEIGHBORHOODS[(rank - 1) % len(MARKET_NEIGHBORHOODS)],
+                dealer_name,
+                dealer_phone,
+                dealer_nit,
+                body,
+                fuel,
+                market_transmission(fuel, rank),
+                7 if body in {"SUV", "Van"} and rank % 7 == 0 else (3 if body == "Camion" else 5),
+                safety,
+                economy,
+                family,
+                performance,
+                comfort,
+                cargo,
+                "Oferta CarTrust del inventario aliado de Medellin para comparar, elegir y solicitar contacto con trazabilidad del referido.",
+                now,
+            ),
+        )
+        conn.execute(
+            "INSERT INTO listing_images (listing_id, url, is_primary) VALUES (?, ?, 1)",
+            (cur.lastrowid, BODY_IMAGE_URLS.get(body, BODY_IMAGE_URLS["SUV"])),
+        )
+        existing_titles.add(listing_title)
+        inserted += 1
+
 
 def build_popular_vehicle_rows():
     rows = []
@@ -604,6 +736,7 @@ def init_db():
                 """,
                 (*row, now),
             )
+    seed_marketplace_inventory(conn)
     conn.commit()
 
 
@@ -1160,17 +1293,17 @@ def index():
 @app.route("/confianza")
 def trust():
     q = clean_text(request.args.get("q"))
-    offers = [serialize(row) for row in query_listings({"sort": "year_desc"}, limit=12)]
+    offers = [serialize(row) for row in query_listings({"q": q, "sort": "year_desc"}, limit=1000)]
     stats = {
         "popular": db().execute("SELECT COUNT(*) total FROM popular_vehicles").fetchone()["total"],
         "offers": db().execute("SELECT COUNT(*) total FROM listings WHERE status='active'").fetchone()["total"],
         "dealers": db().execute("SELECT COUNT(DISTINCT dealer_nit) total FROM listings WHERE status='active'").fetchone()["total"],
         "verified": db().execute("SELECT COUNT(*) total FROM listings WHERE verified=1").fetchone()["total"],
+        "results": len(offers),
     }
     return render_template(
         "trust.html",
         q=q,
-        popular=popular_vehicle_rows(96, q),
         offers=offers,
         stats=stats,
         sources=POPULAR_SOURCE_LINKS,

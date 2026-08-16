@@ -6,12 +6,12 @@
   <div class="trust-hero">
     <div>
       <span class="eyebrow">Confianza CarTrust</span>
-      <h1>Ofertas propias con concesionario referido y una base de 1000 referencias para comparar.</h1>
-      <p>CarTrust muestra el inventario como oferta de la plataforma y deja visible el aliado que respalda cada carro. La base popular ayuda a orientar precio, rotacion y demanda sin copiar inventarios de terceros.</p>
+      <h1>1000 ofertas CarTrust para elegir carro con concesionario referido.</h1>
+      <p>La BD de Confianza ahora funciona como inventario elegible: cada carro tiene ficha, precio, kilometraje, imagen y trazabilidad del aliado que respalda la publicacion.</p>
     </div>
     <div class="trust-proof-panel">
-      <strong>{{ stats.popular }}</strong>
-      <span>referencias internas de mercado</span>
+      <strong>{{ stats.offers }}</strong>
+      <span>ofertas activas para comparar</span>
       <a class="btn primary full" href="#ofertas-cartrust">Ver ofertas</a>
     </div>
   </div>
@@ -31,8 +31,8 @@
     </article>
     <article>
       <i data-lucide="list-checks"></i>
-      <h2>Referencia para decidir mejor.</h2>
-      <p>La BD de 1000 filas cruza marcas, modelos, anios y perfiles de version para que el comprador compare demanda, tecnologia y segmento.</p>
+      <h2>Eleccion por ficha completa.</h2>
+      <p>Las 1000 filas se convierten en carros navegables, con precio, kilometraje, segmento, combustible y pagina de detalle para tomar contacto.</p>
     </article>
     <article>
       <i data-lucide="route"></i>
@@ -45,9 +45,12 @@
     <div class="section-head">
       <div>
         <span class="eyebrow">Ofertas CarTrust</span>
-        <h2>Carros publicados como inventario de la plataforma.</h2>
+        <h2>{{ stats.results }} carros listos para elegir.</h2>
       </div>
-      <a class="btn secondary" href="{{ url_for('index') }}#catalogo">Ver catalogo completo</a>
+      <form class="popular-search" action="{{ url_for('trust') }}" method="get">
+        <input name="q" value="{{ q }}" placeholder="Buscar marca, modelo, SUV, electrico">
+        <button class="btn primary" type="submit"><i data-lucide="search"></i> Buscar</button>
+      </form>
     </div>
     <div class="listing-grid trust-offer-grid">
       {% for item in offers %}
@@ -56,33 +59,7 @@
         <div class="empty">Aun no hay ofertas activas.</div>
       {% endfor %}
     </div>
-  </section>
-
-  <section class="trust-block">
-    <div class="section-head">
-      <div>
-        <span class="eyebrow">BD CarTrust</span>
-        <h2>1000 referencias populares para Colombia.</h2>
-      </div>
-      <form class="popular-search" action="{{ url_for('trust') }}" method="get">
-        <input name="q" value="{{ q }}" placeholder="Buscar marca, modelo, SUV, electrico">
-        <button class="btn primary" type="submit"><i data-lucide="search"></i> Buscar</button>
-      </form>
-    </div>
-
-    <div class="popular-grid">
-      {% for item in popular %}
-        <article class="popular-card">
-          <span>#{{ item.rank_position }}</span>
-          <strong>{{ item.title }}</strong>
-          <div>{{ item.body_type }} · {{ item.fuel_type }}</div>
-          <small>Indice {{ item.popularity_score }}/1000</small>
-        </article>
-      {% else %}
-        <div class="empty">No encontramos referencias con esa busqueda.</div>
-      {% endfor %}
-    </div>
-    <p class="source-note">Esta base es una referencia interna CarTrust construida para comparacion comercial; no declara un ranking oficial individual del puesto 1 al 1000.</p>
+    <p class="source-note">Estas ofertas son inventario CarTrust de referencia comercial con concesionarios aliados de Medellin. En produccion real cada unidad debe validarse con documentos, disponibilidad, garantia y estado mecanico antes de cerrar negocio.</p>
   </section>
 
   <section class="trust-block source-block">

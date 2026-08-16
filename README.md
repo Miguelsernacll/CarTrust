@@ -79,7 +79,7 @@ El flujo de `/pagos` crea intenciones de pago y evita capturar datos sensibles. 
 
 - Del HTML de navegacion: hero claro, buscador protagonista, KPIs, flujo sin registro, asesor y confianza visible.
 - Del Pages: compra usada en Colombia como decision financiera sensible, desconfianza estructural, red de aliados, servicios conexos, fidelizacion/referidos y seguridad/monitoreo como crecimiento futuro.
-- De la evolucion CarTrust: `/confianza` incluye 1000 referencias internas de vehiculos populares en Colombia y muestra las publicaciones activas como Oferta CarTrust con concesionario aliado referido.
+- De la evolucion CarTrust: `/confianza` convierte la BD interna en 1000 ofertas navegables tipo inventario, cada una como Oferta CarTrust con concesionario aliado referido.
 
 ## Asesor inteligente
 
