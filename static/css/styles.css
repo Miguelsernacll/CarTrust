@@ -63,7 +63,7 @@ button, input, select, textarea { font: inherit; }
 .header-nav { display: flex; gap: 14px; align-items: center; font-weight: 700; }
 .sell-link { background: var(--yellow); color: #111; padding: 9px 12px; border-radius: var(--radius); }
 
-.flash-wrap, .hero-market, .trust-strip, .shopping-lanes, .value-band, .value-proposition, .catalog-layout, .detail-page, .spec-section, .related, .form-page, .advisor-page, .map-page, .legal-footer {
+.flash-wrap, .hero-market, .trust-strip, .shopping-lanes, .value-band, .purchase-system, .finance-lab, .catalog-layout, .detail-page, .spec-section, .related, .form-page, .advisor-page, .map-page, .legal-footer {
   max-width: 1240px;
   margin: 0 auto;
   padding: 24px 20px;
@@ -282,9 +282,151 @@ input, select, textarea {
 .value-grid svg { color: var(--green); }
 .value-grid p { color: var(--muted); line-height: 1.5; }
 
-.value-proposition {
+.purchase-system,
+.finance-lab {
   display: grid;
   gap: 16px;
+}
+.system-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.system-card,
+.finance-card,
+.service-row article {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 22px rgba(17,24,39,.05);
+}
+.system-card {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 18px;
+}
+.system-card svg,
+.tool-head svg,
+.service-row svg {
+  width: 24px;
+  height: 24px;
+  color: var(--green);
+}
+.system-card h3,
+.finance-card strong,
+.service-row strong { margin: 0; }
+.system-card p {
+  color: #3b4758;
+  line-height: 1.55;
+  margin-bottom: 0;
+}
+.system-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.5;
+  font-weight: 700;
+}
+.finance-lab {
+  align-items: start;
+}
+.finance-copy {
+  display: grid;
+  gap: 8px;
+  max-width: 960px;
+}
+.finance-copy p {
+  color: #3b4758;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+.finance-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.finance-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 0 12px;
+}
+.finance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.finance-card {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+.tool-head {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+.tool-head strong,
+.service-row strong {
+  display: block;
+  font-size: 18px;
+}
+.tool-head span,
+.service-row span {
+  display: block;
+  color: var(--muted);
+  font-weight: 700;
+  line-height: 1.4;
+}
+.field-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.sim-result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 12px;
+  align-items: baseline;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f8fafc;
+  padding: 14px;
+}
+.sim-result span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+.sim-result strong {
+  color: var(--blue);
+  font-size: clamp(18px, 2vw, 24px);
+  text-align: right;
+}
+.sim-result.strong strong { color: #0f766e; }
+.finance-card small {
+  color: var(--muted);
+  line-height: 1.4;
+}
+.service-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.service-row article {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 16px;
 }
 .proposal-head {
   display: grid;
@@ -916,7 +1058,7 @@ label {
   .best-media { min-height: 320px; }
   .hero-showcase { min-height: 420px; grid-template-columns: 1fr; }
   .showcase-card { width: min(100%, 560px); }
-  .trust-strip, .shopping-lanes, .value-grid, .pillar-grid, .benefit-row, .listing-grid, .legal-grid, .recommendation-list, .dashboard-grid, .alternative-grid { grid-template-columns: repeat(2, 1fr); }
+  .trust-strip, .shopping-lanes, .value-grid, .system-grid, .pillar-grid, .benefit-row, .service-row, .listing-grid, .legal-grid, .recommendation-list, .dashboard-grid, .alternative-grid { grid-template-columns: repeat(2, 1fr); }
   .filters, .buy-panel { position: static; }
 }
 
@@ -950,7 +1092,7 @@ label {
 }
 
 @media (max-width: 640px) {
-  .hero-search, .trust-strip, .shopping-lanes, .value-grid, .pillar-grid, .benefit-row, .listing-grid, .publish-form, .advisor-page .quiz, .legal-grid, .recommendation-list, .spec-grid, .dashboard-grid, .register-card, .payment-card, .quiz-step, .alternative-grid { grid-template-columns: 1fr; }
+  .hero-search, .trust-strip, .shopping-lanes, .value-grid, .system-grid, .finance-grid, .field-pair, .pillar-grid, .benefit-row, .service-row, .listing-grid, .publish-form, .advisor-page .quiz, .legal-grid, .recommendation-list, .spec-grid, .dashboard-grid, .register-card, .payment-card, .quiz-step, .alternative-grid { grid-template-columns: 1fr; }
   .hero-copy h1 { font-size: 34px; }
   .hero-market { padding-top: 16px; }
   .hero-copy { padding: 22px 0 8px; }
@@ -960,6 +1102,8 @@ label {
   .proposal-head { grid-template-columns: 1fr; }
   .proposal-number { min-height: 70px; }
   .proposal-quote { font-size: 20px; }
+  .sim-result { grid-template-columns: 1fr; }
+  .sim-result strong { text-align: left; }
   .advisor-hero-copy { padding: 22px; }
   .advisor-gallery { display: none; }
   .advisor-card { order: 1; }

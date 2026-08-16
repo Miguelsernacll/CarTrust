@@ -65,41 +65,101 @@
   </div>
 </section>
 
-<section class="value-proposition">
-  <div class="proposal-head">
-    <span class="proposal-number">02</span>
+<section class="purchase-system">
+  <div class="section-head">
     <div>
-      <span class="eyebrow">Propuesta de valor</span>
-      <h2>Tu proximo carro usado, con concesionario, credito y seguro en un solo lugar.</h2>
+      <span class="eyebrow">Compra sin salir del sitio</span>
+      <h2>De la busqueda a la cita, con señales utiles en cada paso.</h2>
+    </div>
+    <a class="btn secondary" href="{{ url_for('advisor') }}"><i data-lucide="sparkles"></i> Empezar con el asesor</a>
+  </div>
+  <div class="system-grid">
+    <article class="system-card">
+      <i data-lucide="shield-check"></i>
+      <h3>Confianza operativa</h3>
+      <p>El flujo prioriza inventario de concesionarios aliados en Medellin. Cada publicacion muestra datos comerciales, estado de verificacion y trazabilidad de contacto para reducir riesgo de publicaciones falsas.</p>
+      <ul>
+        <li>NIT, matricula mercantil y representante legal para aliados.</li>
+        <li>Sello visible cuando el aliado pase revision documental.</li>
+        <li>Formulario de contacto con registro interno de leads.</li>
+      </ul>
+    </article>
+    <article class="system-card">
+      <i data-lucide="route"></i>
+      <h3>Conveniencia real</h3>
+      <p>El comprador puede comparar carros, filtrar por presupuesto, guardar su perfil del asesor, simular financiacion y preparar una cita con el concesionario desde una sola experiencia.</p>
+      <ul>
+        <li>Busqueda por precio, combustible, carroceria y marca.</li>
+        <li>Acceso rapido a electrolineras para compradores EV.</li>
+        <li>Base preparada para agenda, peritaje y cotizacion de seguros.</li>
+      </ul>
+    </article>
+    <article class="system-card">
+      <i data-lucide="sparkles"></i>
+      <h3>Asesoria inteligente</h3>
+      <p>El asesor de 7 preguntas no reemplaza al vendedor: traduce uso, presupuesto y prioridades en un puntaje 0-100 frente al inventario activo.</p>
+      <ul>
+        <li>Recomienda carros disponibles, no respuestas genericas.</li>
+        <li>Compara el carro seleccionado contra el recomendado.</li>
+        <li>No consume tokens de IA para calcular el match.</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section id="simuladores" class="finance-lab" data-base-price="120000000">
+  <div class="finance-copy">
+    <span class="eyebrow">Educacion financiera</span>
+    <h2>Simula credito, seguro y costo total antes de enamorarte del carro.</h2>
+    <p>Basado en el flujo publico de Bancolombia/Sufi para vehiculo: simular, elegir modalidad, solicitar estudio y terminar tramites. Los valores son orientativos; la tasa, aprobacion, seguros y cargos finales dependen de cada entidad y del perfil del comprador.</p>
+    <div class="finance-links">
+      <a href="https://www.bancolombia.com/personas/creditos/vehiculo" target="_blank" rel="noreferrer">Credito vehiculo Bancolombia</a>
+      <a href="https://www.sufi.com.co/sufi/creditos/movilidad/vehiculo/nuevo" target="_blank" rel="noreferrer">Planes Sufi</a>
+      <a href="https://www.bancolombia.com/personas/movilidad" target="_blank" rel="noreferrer">Ruta de compra Bancolombia</a>
     </div>
   </div>
-  <p class="proposal-quote">Encuentra tu proximo carro usado con respaldo de concesionario, credito y seguro, desde Medellin para Antioquia.</p>
-  <div class="pillar-grid">
-    <article class="pillar-card pillar-trust">
-      <i data-lucide="shield-check"></i>
-      <strong>Confianza</strong>
-      <p>Inventario solo de concesionarios aliados con respaldo comercial. Sin particulares en la fase inicial, menos riesgo de estafa y mas certeza de que lo publicado existe y tiene garantia.</p>
-    </article>
-    <article class="pillar-card pillar-ease">
-      <i data-lucide="route"></i>
-      <strong>Conveniencia</strong>
-      <p>Buscar, comparar, simular credito, cotizar seguro y agendar cita sin salir del sitio. El usuario avanza en su decision en una sola sesion.</p>
-    </article>
-    <article class="pillar-card pillar-ai">
-      <i data-lucide="sparkles"></i>
-      <strong>Asesoria IA</strong>
-      <p>Un asistente que pregunta para que se usara el carro, cuanto se puede pagar mensualmente y recomienda opciones del catalogo. No es solo buscador: es asesor.</p>
-    </article>
-    <article class="pillar-card pillar-finance">
-      <i data-lucide="badge-dollar-sign"></i>
-      <strong>Educacion financiera</strong>
-      <p>Calculadora de costo total de propiedad: cuota, SOAT, seguro todo riesgo, mantenimiento, impuestos, combustible y precio de retoma para entender el costo mes a mes.</p>
-    </article>
+  <div class="finance-grid">
+    <form id="creditSimulator" class="finance-card">
+      <div class="tool-head">
+        <i data-lucide="credit-card"></i>
+        <div><strong>Simulador de credito</strong><span>Plan tradicional, cuota fija estimada.</span></div>
+      </div>
+      <label>Valor del vehiculo<input id="creditPrice" inputmode="numeric" value="120000000"></label>
+      <label>Cuota inicial<input id="creditDown" inputmode="numeric" value="24000000"></label>
+      <div class="field-pair">
+        <label>Plazo<select id="creditTerm"><option value="36">36 meses</option><option value="48">48 meses</option><option value="60" selected>60 meses</option><option value="72">72 meses</option></select></label>
+        <label>Tasa MV editable<input id="creditRate" inputmode="decimal" value="1.65"></label>
+      </div>
+      <div class="sim-result">
+        <span>Monto a financiar</span><strong id="financeAmount">$0</strong>
+        <span>Cuota mensual estimada</span><strong id="financePayment">$0</strong>
+        <span>Ingreso sugerido aprox.</span><strong id="financeIncome">$0</strong>
+      </div>
+      <small>Referencia de estructura: plazos hasta 72 meses y financiacion sujeta a estudio. No es una oferta bancaria.</small>
+    </form>
+    <form id="ownershipSimulator" class="finance-card">
+      <div class="tool-head">
+        <i data-lucide="badge-dollar-sign"></i>
+        <div><strong>Costo total mensual</strong><span>Cuota + seguro + SOAT + uso diario.</span></div>
+      </div>
+      <label>SOAT anual<input id="tcoSoat" inputmode="numeric" value="1200000"></label>
+      <label>Seguro todo riesgo anual (%)<input id="tcoInsurance" inputmode="decimal" value="4.2"></label>
+      <div class="field-pair">
+        <label>Mantenimiento mensual<input id="tcoMaintenance" inputmode="numeric" value="350000"></label>
+        <label>Combustible/carga mensual<input id="tcoFuel" inputmode="numeric" value="520000"></label>
+      </div>
+      <label>Impuesto vehicular anual<input id="tcoTax" inputmode="numeric" value="1100000"></label>
+      <div class="sim-result strong">
+        <span>Costo mensual de tenerlo</span><strong id="ownershipMonthly">$0</strong>
+        <span>Costo anual estimado</span><strong id="ownershipAnnual">$0</strong>
+      </div>
+      <small>Incluye la cuota estimada del simulador de credito. Ajusta valores segun cotizacion real.</small>
+    </form>
   </div>
-  <div class="benefit-row">
-    <span><i data-lucide="users"></i> Red de aliados para mantenimiento, peritaje y servicios conexos.</span>
-    <span><i data-lucide="badge-check"></i> Referidos y fidelizacion para compradores recurrentes.</span>
-    <span><i data-lucide="gauge"></i> Seguridad vehicular y monitoreo satelital como crecimiento futuro.</span>
+  <div class="service-row">
+    <article><i data-lucide="badge-check"></i><strong>Cotizar seguro</strong><span>Espacio preparado para aseguradoras aliadas con productos de todo riesgo, garantia extendida y asistencia vial.</span></article>
+    <article><i data-lucide="car-front"></i><strong>Agendar cita</strong><span>El comprador llega al concesionario con presupuesto, cuota y costo mensual ya entendidos.</span></article>
+    <article><i data-lucide="users"></i><strong>Red de aliados</strong><span>Peritaje, mantenimiento, repuestos y fidelizacion se integran como beneficios despues de la compra.</span></article>
   </div>
 </section>
 

@@ -129,6 +129,75 @@ function initHeroShowcase() {
   restart();
 }
 
+function parseMoneyInput(value) {
+  const digits = String(value || "").replace(/[^\d]/g, "");
+  return digits ? Number(digits) : 0;
+}
+
+function parseDecimalInput(value) {
+  const normalized = String(value || "").replace(",", ".").replace(/[^\d.]/g, "");
+  const parsed = Number.parseFloat(normalized);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function fixedPayment(principal, monthlyRate, months) {
+  if (!principal || !months) return 0;
+  if (!monthlyRate) return principal / months;
+  return principal * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -months)));
+}
+
+function setText(id, value) {
+  const el = document.querySelector(id);
+  if (el) el.textContent = peso.format(Math.max(0, Math.round(value || 0)));
+}
+
+function initFinanceTools() {
+  const lab = document.querySelector(".finance-lab");
+  const credit = document.querySelector("#creditSimulator");
+  const ownership = document.querySelector("#ownershipSimulator");
+  if (!lab || !credit || !ownership) return;
+
+  const priceInput = document.querySelector("#creditPrice");
+  const downInput = document.querySelector("#creditDown");
+  const termInput = document.querySelector("#creditTerm");
+  const rateInput = document.querySelector("#creditRate");
+  const soatInput = document.querySelector("#tcoSoat");
+  const insuranceInput = document.querySelector("#tcoInsurance");
+  const maintenanceInput = document.querySelector("#tcoMaintenance");
+  const fuelInput = document.querySelector("#tcoFuel");
+  const taxInput = document.querySelector("#tcoTax");
+  let lastPayment = 0;
+
+  function calculate() {
+    const price = parseMoneyInput(priceInput.value) || Number(lab.dataset.basePrice || 0);
+    const down = Math.min(parseMoneyInput(downInput.value), price);
+    const financed = Math.max(0, price - down);
+    const months = Number(termInput.value || 60);
+    const monthlyRate = parseDecimalInput(rateInput.value) / 100;
+    lastPayment = fixedPayment(financed, monthlyRate, months);
+    const suggestedIncome = lastPayment / 0.3;
+
+    const soatMonthly = parseMoneyInput(soatInput.value) / 12;
+    const insuranceMonthly = (price * (parseDecimalInput(insuranceInput.value) / 100)) / 12;
+    const maintenance = parseMoneyInput(maintenanceInput.value);
+    const fuel = parseMoneyInput(fuelInput.value);
+    const taxMonthly = parseMoneyInput(taxInput.value) / 12;
+    const ownershipMonthly = lastPayment + soatMonthly + insuranceMonthly + maintenance + fuel + taxMonthly;
+
+    setText("#financeAmount", financed);
+    setText("#financePayment", lastPayment);
+    setText("#financeIncome", suggestedIncome);
+    setText("#ownershipMonthly", ownershipMonthly);
+    setText("#ownershipAnnual", ownershipMonthly * 12);
+  }
+
+  [priceInput, downInput, termInput, rateInput, soatInput, insuranceInput, maintenanceInput, fuelInput, taxInput].forEach((input) => {
+    input?.addEventListener("input", calculate);
+    input?.addEventListener("change", calculate);
+  });
+  calculate();
+}
+
 function esc(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
 }
@@ -495,6 +564,7 @@ document.addEventListener("DOMContentLoaded", () => {
   icons();
   initButtonFeedback();
   initHeroShowcase();
+  initFinanceTools();
   initRoleFields();
   initFilters();
   initAdvisor();

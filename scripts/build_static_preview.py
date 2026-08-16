@@ -27,7 +27,7 @@ DEMO_PROFILE = {
 
 
 def replace_once(pattern, replacement, text):
-    updated, count = re.subn(pattern, replacement, text, count=1, flags=re.S)
+    updated, count = re.subn(pattern, lambda _match: replacement, text, count=1, flags=re.S)
     if count != 1:
         raise RuntimeError(f"No se pudo reemplazar: {pattern}")
     return updated
