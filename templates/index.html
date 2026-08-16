@@ -22,14 +22,19 @@
       <a class="btn quiet" href="{{ url_for('register') }}">Crear cuenta</a>
     </div>
   </div>
-  <div class="hero-showcase">
+  <div class="hero-showcase" data-showcase-carousel>
     {% for item in featured[:3] %}
-      <a class="showcase-card card-{{ loop.index }}" href="{{ url_for('detail', listing_id=item.id) }}">
+      <a class="showcase-card card-{{ loop.index }} {% if loop.first %}is-active{% endif %}" data-showcase-slide href="{{ url_for('detail', listing_id=item.id) }}">
         <img src="{{ item.image_url }}" alt="{{ item.title }}">
         <span>{{ item.title }}</span>
         <strong>{{ item.price_formatted }}</strong>
       </a>
     {% endfor %}
+    <div class="showcase-dots" aria-label="Ofertas destacadas">
+      {% for item in featured[:3] %}
+        <button type="button" class="{% if loop.first %}is-active{% endif %}" data-showcase-dot aria-label="Ver oferta {{ loop.index }}"></button>
+      {% endfor %}
+    </div>
   </div>
 </section>
 
@@ -57,6 +62,44 @@
     <article><i data-lucide="shield-check"></i><h3>Aliados identificados</h3><p>Registro con datos comerciales, NIT, matricula mercantil y revision para sellos de confianza.</p></article>
     <article><i data-lucide="badge-check"></i><h3>Compra guiada</h3><p>El test conecta necesidad, presupuesto y uso real con carros disponibles del inventario.</p></article>
     <article><i data-lucide="route"></i><h3>Ecosistema rentable</h3><p>Preparado para seguros, pagos digitales, electrolineras, peritajes y referidos sin distraer la compra.</p></article>
+  </div>
+</section>
+
+<section class="value-proposition">
+  <div class="proposal-head">
+    <span class="proposal-number">02</span>
+    <div>
+      <span class="eyebrow">Propuesta de valor</span>
+      <h2>Tu proximo carro usado, con concesionario, credito y seguro en un solo lugar.</h2>
+    </div>
+  </div>
+  <p class="proposal-quote">Encuentra tu proximo carro usado con respaldo de concesionario, credito y seguro, desde Medellin para Antioquia.</p>
+  <div class="pillar-grid">
+    <article class="pillar-card pillar-trust">
+      <i data-lucide="shield-check"></i>
+      <strong>Confianza</strong>
+      <p>Inventario solo de concesionarios aliados con respaldo comercial. Sin particulares en la fase inicial, menos riesgo de estafa y mas certeza de que lo publicado existe y tiene garantia.</p>
+    </article>
+    <article class="pillar-card pillar-ease">
+      <i data-lucide="route"></i>
+      <strong>Conveniencia</strong>
+      <p>Buscar, comparar, simular credito, cotizar seguro y agendar cita sin salir del sitio. El usuario avanza en su decision en una sola sesion.</p>
+    </article>
+    <article class="pillar-card pillar-ai">
+      <i data-lucide="sparkles"></i>
+      <strong>Asesoria IA</strong>
+      <p>Un asistente que pregunta para que se usara el carro, cuanto se puede pagar mensualmente y recomienda opciones del catalogo. No es solo buscador: es asesor.</p>
+    </article>
+    <article class="pillar-card pillar-finance">
+      <i data-lucide="badge-dollar-sign"></i>
+      <strong>Educacion financiera</strong>
+      <p>Calculadora de costo total de propiedad: cuota, SOAT, seguro todo riesgo, mantenimiento, impuestos, combustible y precio de retoma para entender el costo mes a mes.</p>
+    </article>
+  </div>
+  <div class="benefit-row">
+    <span><i data-lucide="users"></i> Red de aliados para mantenimiento, peritaje y servicios conexos.</span>
+    <span><i data-lucide="badge-check"></i> Referidos y fidelizacion para compradores recurrentes.</span>
+    <span><i data-lucide="gauge"></i> Seguridad vehicular y monitoreo satelital como crecimiento futuro.</span>
   </div>
 </section>
 

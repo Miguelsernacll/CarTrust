@@ -63,7 +63,7 @@ button, input, select, textarea { font: inherit; }
 .header-nav { display: flex; gap: 14px; align-items: center; font-weight: 700; }
 .sell-link { background: var(--yellow); color: #111; padding: 9px 12px; border-radius: var(--radius); }
 
-.flash-wrap, .hero-market, .trust-strip, .shopping-lanes, .value-band, .catalog-layout, .detail-page, .spec-section, .related, .form-page, .advisor-page, .map-page, .legal-footer {
+.flash-wrap, .hero-market, .trust-strip, .shopping-lanes, .value-band, .value-proposition, .catalog-layout, .detail-page, .spec-section, .related, .form-page, .advisor-page, .map-page, .legal-footer {
   max-width: 1240px;
   margin: 0 auto;
   padding: 24px 20px;
@@ -189,24 +189,54 @@ input, select, textarea {
 .hero-showcase {
   position: relative;
   min-height: 430px;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 12px;
+  overflow: hidden;
 }
 .showcase-card {
-  position: absolute;
-  display: block;
+  position: relative;
+  display: none;
+  align-self: stretch;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
-  width: 290px;
+  width: min(100%, 440px);
+  min-height: 390px;
+  justify-self: center;
   box-shadow: var(--shadow);
 }
-.showcase-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.showcase-card.is-active {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  animation: showcaseFade .34s ease;
+}
+.showcase-card img { width: 100%; height: 100%; min-height: 270px; aspect-ratio: 4 / 3; object-fit: cover; }
 .showcase-card span, .showcase-card strong { display: block; padding: 8px 12px; }
 .showcase-card span { font-weight: 800; }
 .showcase-card strong { color: var(--blue); padding-top: 0; }
-.card-1 { top: 22px; left: 10px; z-index: 3; }
-.card-2 { top: 120px; right: 10px; z-index: 2; }
-.card-3 { bottom: 16px; left: 78px; z-index: 1; }
+.showcase-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.showcase-dots button {
+  width: 10px;
+  height: 10px;
+  min-height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #b7c0ce;
+  cursor: pointer;
+}
+.showcase-dots button.is-active { width: 28px; background: var(--blue); }
+@keyframes showcaseFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 .trust-strip {
   display: grid;
@@ -252,12 +282,98 @@ input, select, textarea {
 .value-grid svg { color: var(--green); }
 .value-grid p { color: var(--muted); line-height: 1.5; }
 
+.value-proposition {
+  display: grid;
+  gap: 16px;
+}
+.proposal-head {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(17,24,39,.05);
+}
+.proposal-number {
+  display: grid;
+  place-items: center;
+  background: #0b1f3a;
+  color: #fff;
+  font-size: 42px;
+  font-weight: 900;
+}
+.proposal-head > div { padding: 18px; }
+.proposal-head h2 { margin-bottom: 0; }
+.proposal-quote {
+  margin: 0;
+  background: #0b1f3a;
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  font-size: clamp(20px, 3vw, 31px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.28;
+}
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.pillar-card {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-top: 7px solid var(--blue);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: 0 8px 22px rgba(17,24,39,.05);
+}
+.pillar-card svg { width: 24px; height: 24px; }
+.pillar-card strong {
+  font-size: 18px;
+  text-transform: uppercase;
+}
+.pillar-card p {
+  margin: 0;
+  color: #3b4758;
+  line-height: 1.55;
+}
+.pillar-ease { border-top-color: #0fba7d; }
+.pillar-ai { border-top-color: #f97316; }
+.pillar-finance { border-top-color: #2f80d1; }
+.benefit-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.benefit-row span {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 9px;
+  align-items: start;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  color: #344054;
+  font-weight: 800;
+  line-height: 1.35;
+}
+.benefit-row svg { width: 20px; height: 20px; color: var(--green); }
+
 .catalog-layout {
   display: grid;
   grid-template-columns: 260px 1fr;
   gap: 20px;
   align-items: start;
 }
+.catalog-main { min-width: 0; }
 .filters {
   padding: 16px;
   position: sticky;
@@ -286,7 +402,7 @@ label {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
-.listing-card { overflow: hidden; }
+.listing-card { overflow: hidden; min-width: 0; }
 .media { position: relative; display: block; background: #e8edf4; }
 .media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform .2s; }
 .listing-card:hover .media img { transform: scale(1.03); }
@@ -301,8 +417,8 @@ label {
 }
 .badge.inline { position: static; display: inline-block; margin-bottom: 10px; }
 .card-body { padding: 14px; }
-.card-title { min-height: 46px; display: block; font-weight: 800; line-height: 1.3; }
-.price { display: block; font-size: 24px; margin: 8px 0; }
+.card-title { min-height: 46px; display: block; font-weight: 800; line-height: 1.3; overflow-wrap: anywhere; }
+.price { display: block; font-size: clamp(20px, 2vw, 24px); margin: 8px 0; overflow-wrap: anywhere; }
 .specs { display: flex; flex-wrap: wrap; gap: 7px; color: var(--muted); font-size: 13px; }
 .dealer-line { display: flex; align-items: center; gap: 6px; margin-top: 10px; color: var(--muted); font-size: 13px; }
 .empty { grid-column: 1 / -1; padding: 30px; background: #fff; border: 1px dashed var(--line); border-radius: var(--radius); }
@@ -798,9 +914,9 @@ label {
   .advisor-gallery { min-height: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .advisor-gallery-card { position: static; width: auto; }
   .best-media { min-height: 320px; }
-  .hero-showcase { min-height: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .showcase-card { position: static; width: auto; }
-  .trust-strip, .shopping-lanes, .value-grid, .listing-grid, .legal-grid, .recommendation-list, .dashboard-grid, .alternative-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-showcase { min-height: 420px; grid-template-columns: 1fr; }
+  .showcase-card { width: min(100%, 560px); }
+  .trust-strip, .shopping-lanes, .value-grid, .pillar-grid, .benefit-row, .listing-grid, .legal-grid, .recommendation-list, .dashboard-grid, .alternative-grid { grid-template-columns: repeat(2, 1fr); }
   .filters, .buy-panel { position: static; }
 }
 
@@ -808,20 +924,42 @@ label {
   .header-inner {
     height: auto;
     padding: 12px 16px;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: 1fr;
     gap: 10px;
   }
+  .brand { justify-self: start; }
   .top-search { grid-column: 1 / -1; order: 3; }
   .header-nav {
+    grid-column: 1 / -1;
+    order: 2;
+    overflow-x: auto;
     max-width: none;
-    justify-content: flex-end;
+    justify-content: flex-start;
     white-space: nowrap;
+    padding-bottom: 2px;
+    scrollbar-width: none;
   }
+  .header-nav::-webkit-scrollbar { display: none; }
+  .header-nav a {
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: var(--radius);
+    padding: 8px 10px;
+    background: rgba(255,255,255,.06);
+  }
+  .header-nav .sell-link { background: var(--yellow); }
 }
 
 @media (max-width: 640px) {
-  .hero-search, .trust-strip, .shopping-lanes, .value-grid, .listing-grid, .publish-form, .advisor-page .quiz, .legal-grid, .recommendation-list, .spec-grid, .dashboard-grid, .register-card, .payment-card, .quiz-step, .alternative-grid { grid-template-columns: 1fr; }
+  .hero-search, .trust-strip, .shopping-lanes, .value-grid, .pillar-grid, .benefit-row, .listing-grid, .publish-form, .advisor-page .quiz, .legal-grid, .recommendation-list, .spec-grid, .dashboard-grid, .register-card, .payment-card, .quiz-step, .alternative-grid { grid-template-columns: 1fr; }
   .hero-copy h1 { font-size: 34px; }
+  .hero-market { padding-top: 16px; }
+  .hero-copy { padding: 22px 0 8px; }
+  .hero-showcase { min-height: 360px; }
+  .showcase-card { min-height: 320px; }
+  .showcase-card img { min-height: 210px; }
+  .proposal-head { grid-template-columns: 1fr; }
+  .proposal-number { min-height: 70px; }
+  .proposal-quote { font-size: 20px; }
   .advisor-hero-copy { padding: 22px; }
   .advisor-gallery { display: none; }
   .advisor-card { order: 1; }

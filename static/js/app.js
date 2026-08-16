@@ -97,6 +97,38 @@ function initRoleFields() {
   sync();
 }
 
+function initHeroShowcase() {
+  const wrap = document.querySelector("[data-showcase-carousel]");
+  if (!wrap) return;
+  const slides = [...wrap.querySelectorAll("[data-showcase-slide]")];
+  const dots = [...wrap.querySelectorAll("[data-showcase-dot]")];
+  if (slides.length < 2) return;
+  let index = Math.max(0, slides.findIndex((slide) => slide.classList.contains("is-active")));
+  let timer;
+
+  const paint = (nextIndex) => {
+    index = (nextIndex + slides.length) % slides.length;
+    slides.forEach((slide, slideIndex) => slide.classList.toggle("is-active", slideIndex === index));
+    dots.forEach((dot, dotIndex) => dot.classList.toggle("is-active", dotIndex === index));
+  };
+
+  const restart = () => {
+    window.clearInterval(timer);
+    timer = window.setInterval(() => paint(index + 1), 4200);
+  };
+
+  dots.forEach((dot, dotIndex) => {
+    dot.addEventListener("click", () => {
+      paint(dotIndex);
+      restart();
+    });
+  });
+  wrap.addEventListener("mouseenter", () => window.clearInterval(timer));
+  wrap.addEventListener("mouseleave", restart);
+  paint(index);
+  restart();
+}
+
 function esc(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
 }
@@ -462,6 +494,7 @@ function initMap() {
 document.addEventListener("DOMContentLoaded", () => {
   icons();
   initButtonFeedback();
+  initHeroShowcase();
   initRoleFields();
   initFilters();
   initAdvisor();
