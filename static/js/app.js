@@ -57,7 +57,7 @@ function icons() {
 
 function initButtonFeedback() {
   document.addEventListener("click", (event) => {
-    const target = event.target.closest("button, .btn, .sell-link, .shopping-lanes a, .action-card, .choice-card");
+    const target = event.target.closest("button, .btn, .sell-link, .shopping-lanes a, .section-switcher a, .action-card, .choice-card");
     if (!target) return;
     target.classList.add("is-clicked");
     window.setTimeout(() => target.classList.remove("is-clicked"), 240);
@@ -216,6 +216,84 @@ function card(item) {
         <div class="dealer-line"><i data-lucide="${item.verified ? "shield-check" : "badge-check"}"></i> ${item.verified ? "Concesionario verificado" : "Concesionario registrado"} · ${esc(item.neighborhood)}</div>
       </div>
     </article>`;
+}
+
+function chatRecommendationCard(item) {
+  return `
+    <article class="chat-result-card">
+      <a href="/listing/${item.id}"><img src="${esc(item.image_url)}" alt="${esc(item.title)}" loading="lazy"></a>
+      <div>
+        <strong>${item.fit_score}/100</strong>
+        <h3>${esc(item.title)}</h3>
+        <p>${item.price_formatted || peso.format(item.price)}</p>
+        <a class="btn secondary full" href="/listing/${item.id}">Ver ficha</a>
+      </div>
+    </article>`;
+}
+
+function appendChatBubble(messages, text, kind = "bot") {
+  if (!messages) return null;
+  const bubble = document.createElement("div");
+  bubble.className = `chat-bubble ${kind}`;
+  bubble.textContent = text;
+  messages.appendChild(bubble);
+  messages.scrollTop = messages.scrollHeight;
+  return bubble;
+}
+
+function initChatAdvisor() {
+  const form = document.querySelector("#chatAdvisorForm");
+  const input = document.querySelector("#chatAdvisorInput");
+  const messages = document.querySelector("#chatMessages");
+  const results = document.querySelector("#chatRecommendations");
+  const examples = document.querySelectorAll("[data-chat-prompt]");
+  if (!form || !input || !messages || !results) return;
+
+  async function sendPrompt(prompt) {
+    const text = String(prompt || "").trim();
+    if (!text) return;
+    appendChatBubble(messages, text, "user");
+    input.value = "";
+    input.disabled = true;
+    const button = form.querySelector("button");
+    if (button) button.disabled = true;
+    const thinking = appendChatBubble(messages, "Estoy cruzando tu mensaje con el inventario activo...", "bot is-thinking");
+    try {
+      const res = await fetch("/api/chat-advisor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text }),
+      });
+      if (!res.ok) throw new Error("chat_failed");
+      const data = await res.json();
+      if (thinking) thinking.remove();
+      appendChatBubble(messages, data.reply, "bot");
+      if (data.profile) saveAdvisorProfile(data.profile);
+      results.innerHTML = data.recommendations?.length
+        ? data.recommendations.map(chatRecommendationCard).join("")
+        : '<div class="empty mini">No encontramos opciones activas con ese perfil.</div>';
+      icons();
+    } catch (_error) {
+      if (thinking) thinking.remove();
+      appendChatBubble(messages, "No pude calcular la recomendacion ahora. Intenta otra vez en unos segundos.", "bot");
+    } finally {
+      input.disabled = false;
+      if (button) button.disabled = false;
+      input.focus();
+    }
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    sendPrompt(input.value);
+  });
+
+  examples.forEach((button) => {
+    button.addEventListener("click", () => {
+      input.value = button.dataset.chatPrompt || "";
+      sendPrompt(input.value);
+    });
+  });
 }
 
 const advisorFieldLabels = {
@@ -566,6 +644,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeroShowcase();
   initFinanceTools();
   initRoleFields();
+  initChatAdvisor();
   initFilters();
   initAdvisor();
   initComparison();

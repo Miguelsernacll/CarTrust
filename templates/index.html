@@ -53,70 +53,62 @@
   <a href="{{ url_for('charging') }}"><i data-lucide="map"></i><span>Electrolineras</span></a>
 </section>
 
-<section class="value-band">
-  <div>
-    <span class="eyebrow">Modelo de confianza</span>
-    <h2>Menos friccion para compradores serios y mejores leads para aliados.</h2>
-  </div>
-  <div class="value-grid">
-    <article><i data-lucide="shield-check"></i><h3>Aliados identificados</h3><p>Registro con datos comerciales, NIT, matricula mercantil y revision para sellos de confianza.</p></article>
-    <article><i data-lucide="badge-check"></i><h3>Compra guiada</h3><p>El test conecta necesidad, presupuesto y uso real con carros disponibles del inventario.</p></article>
-    <article><i data-lucide="route"></i><h3>Ecosistema rentable</h3><p>Preparado para seguros, pagos digitales, electrolineras, peritajes y referidos sin distraer la compra.</p></article>
-  </div>
+<section class="section-switcher" aria-label="Apartados principales">
+  <a href="#apartado-confianza"><i data-lucide="shield-check"></i><strong>Confianza</strong><span>Solo aliados</span></a>
+  <a href="#simuladores"><i data-lucide="credit-card"></i><strong>Simuladores</strong><span>Credito y costo</span></a>
+  <a href="#asistente-chat"><i data-lucide="sparkles"></i><strong>Chat IA</strong><span>Sin test largo</span></a>
+  <a href="#catalogo"><i data-lucide="car-front"></i><strong>Catalogo</strong><span>Ver ofertas</span></a>
 </section>
 
-<section class="purchase-system">
+<section id="apartado-confianza" class="compact-sections">
   <div class="section-head">
     <div>
-      <span class="eyebrow">Compra sin salir del sitio</span>
-      <h2>De la busqueda a la cita, con señales utiles en cada paso.</h2>
+      <span class="eyebrow">Apartados CarTrust</span>
+      <h2>Una compra guiada, separada por decisiones pequeñas.</h2>
     </div>
-    <a class="btn secondary" href="{{ url_for('advisor') }}"><i data-lucide="sparkles"></i> Empezar con el asesor</a>
+    <a class="btn secondary" href="{{ url_for('register') }}"><i data-lucide="user"></i> Crear cuenta</a>
   </div>
-  <div class="system-grid">
-    <article class="system-card">
+  <div class="compact-grid">
+    <article class="compact-card">
       <i data-lucide="shield-check"></i>
-      <h3>Confianza operativa</h3>
-      <p>El flujo prioriza inventario de concesionarios aliados en Medellin. Cada publicacion muestra datos comerciales, estado de verificacion y trazabilidad de contacto para reducir riesgo de publicaciones falsas.</p>
-      <ul>
-        <li>NIT, matricula mercantil y representante legal para aliados.</li>
-        <li>Sello visible cuando el aliado pase revision documental.</li>
-        <li>Formulario de contacto con registro interno de leads.</li>
-      </ul>
+      <h3>Confianza</h3>
+      <p>Inventario de concesionarios de usados en Medellin, con datos comerciales y estado de verificacion visible.</p>
+      <div class="card-tags"><span>NIT</span><span>Matricula</span><span>Leads trazables</span></div>
     </article>
-    <article class="system-card">
+    <article class="compact-card">
       <i data-lucide="route"></i>
-      <h3>Conveniencia real</h3>
-      <p>El comprador puede comparar carros, filtrar por presupuesto, guardar su perfil del asesor, simular financiacion y preparar una cita con el concesionario desde una sola experiencia.</p>
-      <ul>
-        <li>Busqueda por precio, combustible, carroceria y marca.</li>
-        <li>Acceso rapido a electrolineras para compradores EV.</li>
-        <li>Base preparada para agenda, peritaje y cotizacion de seguros.</li>
-      </ul>
+      <h3>Conveniencia</h3>
+      <p>Busca, compara, simula credito, revisa carga EV y prepara la cita sin saltar entre herramientas.</p>
+      <div class="card-tags"><span>Filtros</span><span>Citas</span><span>EV</span></div>
     </article>
-    <article class="system-card">
+    <article class="compact-card">
       <i data-lucide="sparkles"></i>
-      <h3>Asesoria inteligente</h3>
-      <p>El asesor de 7 preguntas no reemplaza al vendedor: traduce uso, presupuesto y prioridades en un puntaje 0-100 frente al inventario activo.</p>
-      <ul>
-        <li>Recomienda carros disponibles, no respuestas genericas.</li>
-        <li>Compara el carro seleccionado contra el recomendado.</li>
-        <li>No consume tokens de IA para calcular el match.</li>
-      </ul>
+      <h3>Asesoria IA</h3>
+      <p>El test o el chat traducen necesidad, presupuesto y uso real en una recomendacion 0-100.</p>
+      <div class="card-tags"><span>7 preguntas</span><span>Chat</span><span>Match</span></div>
+    </article>
+    <article class="compact-card">
+      <i data-lucide="badge-dollar-sign"></i>
+      <h3>Educacion financiera</h3>
+      <p>Credito, seguro, SOAT, mantenimiento, impuesto y energia/gasolina en una lectura mensual.</p>
+      <div class="card-tags"><span>Cuota</span><span>Seguro</span><span>Uso mensual</span></div>
     </article>
   </div>
 </section>
 
-<section id="simuladores" class="finance-lab" data-base-price="120000000">
+<section id="simuladores" class="finance-lab compact-lab" data-base-price="120000000">
   <div class="finance-copy">
-    <span class="eyebrow">Educacion financiera</span>
-    <h2>Simula credito, seguro y costo total antes de enamorarte del carro.</h2>
-    <p>Basado en el flujo publico de Bancolombia/Sufi para vehiculo: simular, elegir modalidad, solicitar estudio y terminar tramites. Los valores son orientativos; la tasa, aprobacion, seguros y cargos finales dependen de cada entidad y del perfil del comprador.</p>
-    <div class="finance-links">
-      <a href="https://www.bancolombia.com/personas/creditos/vehiculo" target="_blank" rel="noreferrer">Credito vehiculo Bancolombia</a>
-      <a href="https://www.sufi.com.co/sufi/creditos/movilidad/vehiculo/nuevo" target="_blank" rel="noreferrer">Planes Sufi</a>
-      <a href="https://www.bancolombia.com/personas/movilidad" target="_blank" rel="noreferrer">Ruta de compra Bancolombia</a>
-    </div>
+    <span class="eyebrow">Simuladores</span>
+    <h2>Antes de enamorarte, entiende la cuota y el costo mensual.</h2>
+    <details class="compact-details">
+      <summary>Fuentes y alcance</summary>
+      <p>Referencia funcional basada en flujos publicos de credito vehiculo de Bancolombia/Sufi. Los valores son orientativos y no reemplazan estudio, aprobacion ni cotizacion final.</p>
+      <div class="finance-links">
+        <a href="https://www.bancolombia.com/personas/creditos/vehiculo" target="_blank" rel="noreferrer">Credito Bancolombia</a>
+        <a href="https://www.sufi.com.co/sufi/creditos/movilidad/vehiculo/nuevo" target="_blank" rel="noreferrer">Planes Sufi</a>
+        <a href="https://www.bancolombia.com/personas/movilidad" target="_blank" rel="noreferrer">Ruta de compra</a>
+      </div>
+    </details>
   </div>
   <div class="finance-grid">
     <form id="creditSimulator" class="finance-card">
@@ -156,10 +148,33 @@
       <small>Incluye la cuota estimada del simulador de credito. Ajusta valores segun cotizacion real.</small>
     </form>
   </div>
-  <div class="service-row">
-    <article><i data-lucide="badge-check"></i><strong>Cotizar seguro</strong><span>Espacio preparado para aseguradoras aliadas con productos de todo riesgo, garantia extendida y asistencia vial.</span></article>
-    <article><i data-lucide="car-front"></i><strong>Agendar cita</strong><span>El comprador llega al concesionario con presupuesto, cuota y costo mensual ya entendidos.</span></article>
-    <article><i data-lucide="users"></i><strong>Red de aliados</strong><span>Peritaje, mantenimiento, repuestos y fidelizacion se integran como beneficios despues de la compra.</span></article>
+  <div class="service-row compact-row">
+    <article><i data-lucide="badge-check"></i><strong>Seguro</strong><span>Preparado para cotizar todo riesgo, garantia y asistencia vial.</span></article>
+    <article><i data-lucide="car-front"></i><strong>Cita</strong><span>Llega al concesionario con cuota y costo mensual entendidos.</span></article>
+    <article><i data-lucide="users"></i><strong>Aliados</strong><span>Peritaje, mantenimiento y beneficios postcompra en un mismo flujo.</span></article>
+  </div>
+</section>
+
+<section id="asistente-chat" class="chat-advisor">
+  <div class="chat-copy">
+    <span class="eyebrow">Chat IA</span>
+    <h2>Describe el carro que quieres y recibe opciones sin responder el test.</h2>
+    <p>Escribe como hablas: presupuesto, ciudad, personas, uso diario, viajes, EV o seguridad. CarTrust lo convierte en perfil y lo cruza con el inventario.</p>
+    <div class="chat-examples" aria-label="Ejemplos para el chat">
+      <button type="button" data-chat-prompt="Tengo 120 millones, familia de 4, quiero SUV segura para viajar.">Familia y viajes</button>
+      <button type="button" data-chat-prompt="Busco algo economico para Medellin, bajo consumo, maximo 80 millones.">Ciudad economica</button>
+      <button type="button" data-chat-prompt="Quiero electrico, tengo carga en casa y presupuesto de 180 millones.">Electrico con carga</button>
+    </div>
+  </div>
+  <div class="chat-panel" data-chat-panel>
+    <div id="chatMessages" class="chat-messages" aria-live="polite">
+      <div class="chat-bubble bot">Hola, soy el asesor CarTrust. Dime presupuesto, uso y cuantas personas van normalmente.</div>
+    </div>
+    <form id="chatAdvisorForm" class="chat-form">
+      <input id="chatAdvisorInput" autocomplete="off" placeholder="Ej: SUV hasta 120 millones, familia de 4, segura">
+      <button class="btn primary" type="submit"><i data-lucide="sparkles"></i> Recomendar</button>
+    </form>
+    <div id="chatRecommendations" class="chat-recommendations"></div>
   </div>
 </section>
 

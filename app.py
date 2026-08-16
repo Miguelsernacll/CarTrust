@@ -503,6 +503,91 @@ def recommendations(profile):
     return sorted(ranked, key=lambda x: x["fit_score"], reverse=True)[:4]
 
 
+def chat_budget(message):
+    text = normalize_key(message)
+    if "mil millones" in text or "1000 millones" in text:
+        return 1_000_000_000
+    for match in re.finditer(r"(\d+(?:[\.,]\d+)?)\s*(?:m|mm|millon|millones)\b", text):
+        amount = float(match.group(1).replace(",", "."))
+        return min(1_000_000_000, int(amount * 1_000_000))
+    amounts = []
+    for match in re.finditer(r"\$?\s*\d[\d\.\,\s]{6,}", message):
+        value = parse_int(match.group(0))
+        if value and value >= 20_000_000:
+            amounts.append(value)
+    if amounts:
+        return min(1_000_000_000, max(amounts))
+    if any(word in text for word in ["barato", "economico", "bajo presupuesto"]):
+        return 80_000_000
+    if any(word in text for word in ["premium", "lujo", "alta gama"]):
+        return 1_000_000_000
+    return 150_000_000
+
+
+def chat_profile(message):
+    text = normalize_key(message)
+    profile = {
+        "usage": "city",
+        "budget": str(chat_budget(message)),
+        "people": "4",
+        "daily_km": "40",
+        "charging_access": "none",
+        "priority": "economy",
+        "preferred_type": "any",
+    }
+    if any(word in text for word in ["familia", "hijos", "ninos", "bebe", "sillas"]):
+        profile.update({"usage": "family", "people": "5", "priority": "family"})
+    if any(word in text for word in ["trabajo", "herramienta", "finca", "negocio", "carga pesada", "llevar carga", "mercancia"]):
+        profile["usage"] = "work"
+    if any(word in text for word in ["viaje", "carretera", "viajar", "intermunicipal", "ruta"]):
+        profile["usage"] = "travel"
+    if match := re.search(r"(\d+)\s*(?:personas|pasajeros|puestos|sillas)", text):
+        profile["people"] = str(min(7, max(2, int(match.group(1)))))
+    elif "familia grande" in text:
+        profile["people"] = "7"
+    if match := re.search(r"(\d+)\s*km", text):
+        profile["daily_km"] = str(min(180, max(10, int(match.group(1)))))
+    if any(word in text for word in ["seguro", "seguridad", "confiable", "familia"]):
+        profile["priority"] = "safety" if "familia" not in text else profile["priority"]
+    if any(word in text for word in ["ahorro", "economia", "economico", "consumo", "gasolina"]):
+        profile["priority"] = "economy"
+    if any(word in text for word in ["comodo", "comodidad", "confort", "silencioso"]):
+        profile["priority"] = "comfort"
+    if any(word in text for word in ["potente", "rapido", "deportivo", "desempeno"]):
+        profile["priority"] = "performance"
+    if any(word in text for word in ["suv", "camioneta"]):
+        profile["preferred_type"] = "suv"
+    if "sedan" in text:
+        profile["preferred_type"] = "sedan"
+    if any(word in text for word in ["hatchback", "compacto", "pequeno"]):
+        profile["preferred_type"] = "hatchback"
+    if any(word in text for word in ["pickup", "pick up", "camioneta de trabajo"]):
+        profile["preferred_type"] = "pickup"
+    if "electrico" in text or re.search(r"\bev\b", text) or "cero emisiones" in text:
+        profile["preferred_type"] = "electric"
+    if any(word in text for word in ["cargador en casa", "carga en casa", "wallbox", "parqueadero con carga", "carga en el trabajo"]):
+        profile["charging_access"] = "home"
+    elif any(word in text for word in ["electrolinera", "carga publica", "estacion de carga"]):
+        profile["charging_access"] = "public"
+    return profile
+
+
+def chat_reply(message, profile, recs):
+    text = normalize_key(message)
+    if not text:
+        return "Cuentame presupuesto, uso principal y cuantas personas van normalmente. Con eso te recomiendo carros del inventario."
+    if not recs:
+        return "No encontre carros activos para ese perfil. Prueba ampliar presupuesto, tipo de carro o uso principal."
+    top = recs[0]
+    alternatives = ", ".join(item["title"] for item in recs[1:3]) or "otras opciones similares"
+    reasons = top.get("fit_reasons") or ["es la opcion con mayor afinidad frente a lo que escribiste"]
+    return (
+        f"Te llevaria primero a {top['title']}: marca {top['fit_score']}/100 para tu perfil. "
+        f"Lo favorece que {reasons[0].lower()} Precio de referencia en CarTrust: {top['price_formatted']}. "
+        f"Tambien miraria {alternatives}. Si me dices cuota mensual ideal o si tienes carga EV en casa, lo afino mas."
+    )
+
+
 def account_home(role):
     return {
         "customer": "customer_dashboard",
@@ -883,6 +968,19 @@ def api_listings():
 def api_recommend():
     profile = request.get_json(silent=True) or {}
     return jsonify({"profile": profile, "recommendations": recommendations(profile)})
+
+
+@app.post("/api/chat-advisor")
+def api_chat_advisor():
+    payload = request.get_json(silent=True) or {}
+    message = clean_text(payload.get("message"))
+    profile = chat_profile(message)
+    recs = recommendations(profile)
+    return jsonify({
+        "reply": chat_reply(message, profile, recs),
+        "profile": profile,
+        "recommendations": recs[:3],
+    })
 
 
 @app.post("/api/listings/<int:listing_id>/score")
