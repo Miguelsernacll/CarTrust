@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Pagos | CarTrust{% endblock %}
+
+{% block content %}
+<section class="payments-page">
+  <div>
+    <span class="eyebrow">Pagos digitales</span>
+    <h1>Crear intencion de pago.</h1>
+    <p>Flujo listo para integrar pasarela. No pedimos ni guardamos numeros de tarjeta, CVC ni claves bancarias.</p>
+  </div>
+  <form class="payment-card" action="{{ url_for('payments') }}" method="post">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <label>Concepto<input name="concept" required value="Reserva o servicio CarTrust"></label>
+    <label>Valor COP<input name="amount" required inputmode="numeric" placeholder="1.000.000"></label>
+    <label class="wide">Metodo
+      <select name="method" required>
+        {% for code, label in payment_methods %}
+          <option value="{{ code }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button class="btn primary full wide" type="submit">Crear pago</button>
+    <p class="muted wide">Pagos fisicos como Efecty, corresponsales y efectivo no estan habilitados.</p>
+  </form>
+  <section class="panel-block">
+    <h2>Historial</h2>
+    {% if payments %}
+      <div class="mini-list">
+        {% for item in payments %}
+          <div><strong>{{ item.reference }} · {{ item.concept }}</strong><span>{{ item.amount|money }} · {{ item.method }} · {{ item.status }}</span></div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">No hay pagos creados todavia.</p>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

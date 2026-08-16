@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CarTrust{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css', v=asset_version) }}">
+</head>
+<body>
+  <header class="market-header">
+    <div class="header-inner">
+      <a class="brand" href="{{ url_for('index') }}"><span>CT</span><strong>CarTrust</strong></a>
+      <form class="top-search" action="{{ url_for('index') }}" method="get">
+        <input name="q" placeholder="Buscar marca, modelo o barrio" value="{{ request.args.get('q', '') }}">
+        <button type="submit" aria-label="Buscar"><i data-lucide="search"></i></button>
+      </form>
+      <nav class="header-nav">
+        <a href="{{ url_for('advisor') }}">Asesor</a>
+        <a href="{{ url_for('charging') }}">Carga EV</a>
+        <a href="{{ url_for('references') }}">Precios</a>
+        {% if current_user %}
+          {% if current_user.role == 'dealer' %}
+            <a href="{{ url_for('publish') }}" class="sell-link">Publicar carro</a>
+          {% elif current_user.role == 'insurer' %}
+            <a href="{{ url_for('publish_insurance') }}" class="sell-link">Publicar seguro</a>
+          {% endif %}
+          <a href="{{ url_for('payments') }}">Pagos</a>
+          <a href="{{ url_for('account') }}">{{ role_labels[current_user.role] }}</a>
+          <a href="{{ url_for('logout') }}">Salir</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Entrar</a>
+          <a href="{{ url_for('register') }}" class="sell-link">Crear cuenta</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer class="legal-footer">
+    <div class="legal-brand">
+      <strong>CarTrust</strong>
+      <p>Portal de contacto para carros usados publicados por concesionarios verificados. Los pagos reales deben procesarse por pasarela certificada; CarTrust no almacena datos sensibles de tarjetas.</p>
+    </div>
+    <div class="legal-grid">
+      <details>
+        <summary>Tratamiento de datos</summary>
+        <p>Al enviar formularios autorizas el uso de tus datos para crear cuenta, verificar identidad, gestionar contacto, prevenir fraude y conservar trazabilidad del servicio.</p>
+      </details>
+      <details>
+        <summary>Habeas Data</summary>
+        <p>Puedes conocer, actualizar, rectificar o solicitar supresion de tus datos conforme a Ley 1266 de 2008 y Ley 1581 de 2012.</p>
+      </details>
+      <details>
+        <summary>Consumidor</summary>
+        <p>Los concesionarios deben entregar informacion clara y verificable del vehiculo, precio, garantia, disponibilidad y condiciones aplicables segun Ley 1480 de 2011.</p>
+      </details>
+      <details>
+        <summary>Comercio electronico</summary>
+        <p>CarTrust solicita identidad, NIT, direccion, contacto y datos de registro a proveedores empresariales. Para produccion deben completarse sociedad operadora, PQR, NIT, domicilio y revision juridica.</p>
+      </details>
+    </div>
+    <div class="legal-links">
+      <a href="https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=34488" target="_blank" rel="noreferrer">Ley 1266</a>
+      <a href="https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=49981" target="_blank" rel="noreferrer">Ley 1581</a>
+      <a href="https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=44306" target="_blank" rel="noreferrer">Ley 1480</a>
+      <a href="https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=4276" target="_blank" rel="noreferrer">Ley 527</a>
+      <a href="https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=171718" target="_blank" rel="noreferrer">Ley 2439</a>
+      <a href="https://sedeelectronica.sic.gov.co/temas/proteccion-al-consumidor" target="_blank" rel="noreferrer">SIC</a>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js', v=asset_version) }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

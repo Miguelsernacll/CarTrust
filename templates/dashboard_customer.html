@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Panel comprador | CarTrust{% endblock %}
+
+{% block content %}
+<section class="dashboard-page">
+  <div class="section-head">
+    <div><span class="eyebrow">Particular</span><h1>Panel de compra</h1></div>
+    <a class="btn primary" href="{{ url_for('index') }}">Comprar carros</a>
+  </div>
+  <div class="dashboard-grid">
+    <a class="action-card" href="{{ url_for('index') }}"><i data-lucide="car-front"></i><strong>Comprar</strong><span>{{ stats.vehicles }} carros activos</span></a>
+    <a class="action-card" href="{{ url_for('advisor') }}"><i data-lucide="sparkles"></i><strong>Asesor de 7 preguntas</strong><span>Recibe recomendacion 0-100</span></a>
+    <a class="action-card" href="{{ url_for('charging') }}"><i data-lucide="plug-zap"></i><strong>Carga EV</strong><span>{{ stats.ev }} electricos en catalogo</span></a>
+    <a class="action-card" href="{{ url_for('payments') }}"><i data-lucide="credit-card"></i><strong>Pagos</strong><span>Metodos digitales</span></a>
+  </div>
+  <section class="panel-block">
+    <h2>Pagos recientes</h2>
+    {% if payments %}
+      <div class="mini-list">
+        {% for item in payments %}
+          <div><strong>{{ item.concept }}</strong><span>{{ item.amount|money }} · {{ item.status }}</span></div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">Aun no tienes pagos creados.</p>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

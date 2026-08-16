@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Electrolineras | CarTrust{% endblock %}
+{% block content %}
+<section class="map-page">
+  <span class="eyebrow">Movilidad electrica</span>
+  <h1>Electrolineras por capital de Colombia.</h1>
+  <div class="map-layout">
+    <div id="chargingMap"></div>
+    <aside class="station-panel">
+      <label>Ciudad<select id="citySelect">{% for city in cities.keys()|sort %}<option value="{{ city }}" {% if city == 'Medellin' %}selected{% endif %}>{{ city }}</option>{% endfor %}</select></label>
+      <button id="reloadStations" class="btn secondary full">Actualizar</button>
+      <p id="stationSource"></p>
+      <strong id="stationCount">Cargando...</strong>
+      <div id="stationList"></div>
+    </aside>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>{% endblock %}

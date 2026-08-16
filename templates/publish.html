@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Publicar carro | CarTrust{% endblock %}
+
+{% block content %}
+<section class="form-page">
+  <span class="eyebrow">Concesionarios</span>
+  <h1>Publica un carro usado en CarTrust.</h1>
+  <p>Por ahora solo concesionarios de usados en Medellin. El alcance nacional se cambia en <code>config/market_scope.json</code>.</p>
+  <div class="account-strip">
+    <strong>{{ dealer.business_name or dealer.name }}</strong>
+    <span>{{ verification_labels.get(dealer.verification_status, 'En revision') }} · NIT {{ dealer.nit }} · Matricula {{ dealer.commercial_registry or 'pendiente' }} · {{ dealer.city }}</span>
+  </div>
+  <form class="publish-form" action="{{ url_for('publish') }}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <label>Titulo<input name="title" required placeholder="Toyota Corolla Cross Hybrid 2024" value="{{ form.get('title', '') if form else '' }}"></label>
+    <label>Precio COP<input name="price" required inputmode="numeric" placeholder="142.000.000" value="{{ form.get('price', '') if form else '' }}"></label>
+    <label>Marca<input name="make" required value="{{ form.get('make', '') if form else '' }}"></label>
+    <label>Modelo<input name="model" required value="{{ form.get('model', '') if form else '' }}"></label>
+    <label>Año<input name="year" inputmode="numeric" value="{{ form.get('year', '') if form else '' }}"></label>
+    <label>Kilometraje<input name="mileage" inputmode="numeric" value="{{ form.get('mileage', '') if form else '' }}"></label>
+    <label>Ciudad<input name="city" value="{{ form.get('city', dealer.city or 'Medellin') if form else dealer.city or 'Medellin' }}"></label>
+    <label>Barrio<input name="neighborhood" value="{{ form.get('neighborhood', '') if form else '' }}"></label>
+    <label>Tipo<select name="body_type"><option>SUV</option><option>Sedan</option><option>Hatchback</option><option>Pickup</option><option>Van</option></select></label>
+    <label>Combustible<select name="fuel_type"><option>Gasolina</option><option>Hibrido</option><option>Electrico</option><option>Diesel</option></select></label>
+    <label>Transmision<select name="transmission"><option>Automatica</option><option>Manual</option></select></label>
+    <label>Pasajeros<input name="seats" inputmode="numeric" value="{{ form.get('seats', '5') if form else '5' }}"></label>
+    <label class="wide">Descripcion<textarea name="description" rows="4">{{ form.get('description', '') if form else '' }}</textarea></label>
+    <label class="wide">Fotos<input type="file" name="images" multiple accept="image/*"></label>
+    <label class="check wide"><input type="checkbox" name="legal_acceptance" required><span>Acepto politicas, tratamiento de datos y declaro informacion veraz del vehiculo.</span></label>
+    <button class="btn primary" type="submit">Publicar</button>
+  </form>
+</section>
+{% endblock %}

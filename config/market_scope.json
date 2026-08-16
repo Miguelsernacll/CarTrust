@@ -1,0 +1,6 @@
+{
+  "brand": "CarTrust",
+  "market_mode": "medellin",
+  "allowed_dealer_cities": ["Medellin"],
+  "future_national_enabled": false
+}

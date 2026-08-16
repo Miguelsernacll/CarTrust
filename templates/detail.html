@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ listing.title }} | CarTrust{% endblock %}
+
+{% block content %}
+<section class="detail-page">
+  <div class="detail-media"><img src="{{ image }}" alt="{{ listing.title }}"></div>
+  <aside class="buy-panel">
+    <span class="badge inline">{{ 'Concesionario verificado' if listing.verified else 'Concesionario registrado' }}</span>
+    <h1>{{ listing.title }}</h1>
+    <div class="detail-price">{{ listing.price|money }}</div>
+    <p>{{ listing.neighborhood }} · {{ listing.year }} · {{ listing.mileage|number }} km</p>
+    <form action="{{ url_for('contact', listing_id=listing.id) }}" method="post" class="lead-form">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+      <label>Nombre<input name="name" required></label>
+      <label>Celular<input name="phone" required></label>
+      <label>Mensaje<textarea name="message" rows="3">Hola, quiero informacion sobre {{ listing.title }}.</textarea></label>
+      <label class="check"><input type="checkbox" name="privacy_acceptance" required><span>Acepto tratamiento de datos para ser contactado.</span></label>
+      <button class="btn primary full" type="submit">Contactar concesionario</button>
+      <a class="btn secondary full" href="{{ url_for('payments') }}">Crear pago digital</a>
+    </form>
+  </aside>
+</section>
+
+<section class="spec-section">
+  <div>
+    <span class="eyebrow">Ficha tecnica</span>
+    <h2>Detalles para decidir mejor</h2>
+    <div class="spec-grid">
+      <div><span>Marca</span><strong>{{ listing.make }}</strong></div>
+      <div><span>Modelo</span><strong>{{ listing.model }}</strong></div>
+      <div><span>Tipo</span><strong>{{ listing.body_type }}</strong></div>
+      <div><span>Combustible</span><strong>{{ listing.fuel_type }}</strong></div>
+      <div><span>Transmision</span><strong>{{ listing.transmission }}</strong></div>
+      <div><span>Pasajeros</span><strong>{{ listing.seats }}</strong></div>
+    </div>
+    <p class="description">{{ listing.description }}</p>
+  </div>
+  <aside id="comparisonPanel" class="score-panel" data-listing-id="{{ listing.id }}">
+    <h3>Conveniencia segun tu test</h3>
+    <p class="score-empty">Haz el asesor de 7 preguntas y vuelve a esta ficha para ver el puntaje 0-100.</p>
+    <div class="score-result" hidden>
+      <div class="score-ring"><span id="relativeScore">0</span>/100</div>
+      <p id="scoreNarrative"></p>
+      <ul id="scoreReasons"></ul>
+      <a id="benchmarkLink" class="btn secondary full" href="#">Ver recomendado</a>
+    </div>
+  </aside>
+</section>
+
+{% if related %}
+<section class="related">
+  <span class="eyebrow">Opciones similares</span>
+  <div class="listing-grid">
+    {% for item in related %}{% include "_listing_card.html" %}{% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

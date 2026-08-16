@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Referencias | CarTrust{% endblock %}
+{% block content %}
+<section class="form-page">
+  <span class="eyebrow">Referencias</span>
+  <h1>Base de precios autorizada.</h1>
+  <table class="ref-table"><thead><tr><th>Marca</th><th>Modelo</th><th>Año</th><th>Promedio</th><th>Rango</th></tr></thead><tbody>
+    {% for item in references %}<tr><td>{{ item.make }}</td><td>{{ item.model }}</td><td>{{ item.year }}</td><td>{{ item.avg_price|money }}</td><td>{{ item.min_price|money }} - {{ item.max_price|money }}</td></tr>{% endfor %}
+  </tbody></table>
+</section>
+{% endblock %}

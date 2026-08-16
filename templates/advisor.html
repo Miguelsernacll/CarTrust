@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Asesor inteligente | CarTrust{% endblock %}
+
+{% block content %}
+<section class="advisor-page advisor-experience">
+  <div class="advisor-command">
+    <div class="advisor-command-copy">
+      <span class="eyebrow">Asesor inteligente CarTrust</span>
+      <h1>Encuentra el carro que realmente te conviene.</h1>
+      <p>Responde 7 preguntas rápidas. Comparamos tu perfil con el inventario activo y te mostramos una recomendación clara con score 0-100.</p>
+    </div>
+    <div class="advisor-metrics" aria-label="Resumen del asesor">
+      <div><strong>7</strong><span>señales de compra</span></div>
+      <div><strong>0-100</strong><span>conveniencia estimada</span></div>
+      <div><strong>EV</strong><span>carga y uso real</span></div>
+    </div>
+    {% if featured %}
+      <a class="advisor-live-card" href="{{ url_for('detail', listing_id=featured[0].id) }}">
+        <img src="{{ featured[0].image_url }}" alt="{{ featured[0].title }}">
+        <span><i data-lucide="sparkles"></i> Inventario destacado</span>
+        <strong>{{ featured[0].title }}</strong>
+        <small>{{ featured[0].price_formatted }}</small>
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="advisor-shell">
+    <div class="advisor-card advisor-main-card">
+      <div class="quiz-top">
+        <div class="quiz-headline">
+          <span id="stepCounter">Pregunta 1 de 7</span>
+          <strong id="stepTitle">Uso principal</strong>
+        </div>
+        <div class="progress-track" aria-hidden="true"><span id="quizProgress"></span></div>
+        <div id="advisorStepper" class="advisor-stepper" aria-label="Progreso del test">
+          <button type="button" data-step="0">Uso</button>
+          <button type="button" data-step="1">Precio</button>
+          <button type="button" data-step="2">Personas</button>
+          <button type="button" data-step="3">Km</button>
+          <button type="button" data-step="4">EV</button>
+          <button type="button" data-step="5">Prioridad</button>
+          <button type="button" data-step="6">Tipo</button>
+        </div>
+      </div>
+
+      <form id="quizForm" class="quiz-wizard">
+        <fieldset class="quiz-step is-active" data-field="usage" data-title="Uso principal" data-tip="El uso cambia el tipo ideal: ciudad premia agilidad; familia y viajes premian espacio; trabajo premia capacidad y costo operativo.">
+          <legend>¿Para qué lo vas a usar la mayoría del tiempo?</legend>
+          <label class="choice-card"><input type="radio" name="usage" value="city"><span><i data-lucide="building-2"></i><strong>Ciudad</strong><small>Tráfico, parqueaderos y recorridos cortos.</small></span></label>
+          <label class="choice-card"><input type="radio" name="usage" value="family"><span><i data-lucide="users"></i><strong>Familia</strong><small>Espacio, seguridad y comodidad diaria.</small></span></label>
+          <label class="choice-card"><input type="radio" name="usage" value="work"><span><i data-lucide="briefcase-business"></i><strong>Trabajo</strong><small>Carga, resistencia y costo operativo.</small></span></label>
+          <label class="choice-card"><input type="radio" name="usage" value="travel"><span><i data-lucide="route"></i><strong>Viajes</strong><small>Carretera, baúl, potencia y confort.</small></span></label>
+        </fieldset>
+
+        <fieldset class="quiz-step" data-field="budget" data-title="Presupuesto" data-tip="Incluye matrícula, peritaje, seguro, mantenimiento inicial y reserva. El rango máximo llega a $1.000 millones.">
+          <legend>¿Cuál es tu presupuesto máximo?</legend>
+          <label class="choice-card"><input type="radio" name="budget" value="55000000"><span><i data-lucide="wallet"></i><strong>Hasta $55M</strong><small>Compra eficiente y bajo costo.</small></span></label>
+          <label class="choice-card"><input type="radio" name="budget" value="120000000"><span><i data-lucide="badge-dollar-sign"></i><strong>Hasta $120M</strong><small>Balance entre año, seguridad y confort.</small></span></label>
+          <label class="choice-card"><input type="radio" name="budget" value="250000000"><span><i data-lucide="gem"></i><strong>Hasta $250M</strong><small>SUVs, híbridos y opciones recientes.</small></span></label>
+          <label class="choice-card"><input type="radio" name="budget" value="500000000"><span><i data-lucide="sparkles"></i><strong>Hasta $500M</strong><small>Premium con mejor equipamiento.</small></span></label>
+          <label class="choice-card"><input type="radio" name="budget" value="1000000000"><span><i data-lucide="crown"></i><strong>Hasta $1.000M</strong><small>Alta gama y máximas prestaciones.</small></span></label>
+        </fieldset>
+
+        <fieldset class="quiz-step" data-field="people" data-title="Personas" data-tip="Piensa en sillas infantiles, adultos mayores, equipaje y viajes de fin de semana, no solo en el número de puestos.">
+          <legend>¿Cuántas personas viajan normalmente?</legend>
+          <label class="choice-card"><input type="radio" name="people" value="2"><span><i data-lucide="user"></i><strong>1-2</strong><small>Practicidad y consumo primero.</small></span></label>
+          <label class="choice-card"><input type="radio" name="people" value="4"><span><i data-lucide="users"></i><strong>3-4</strong><small>Espacio cómodo para diario.</small></span></label>
+          <label class="choice-card"><input type="radio" name="people" value="5"><span><i data-lucide="car-front"></i><strong>5</strong><small>Cabina completa y buen baúl.</small></span></label>
+          <label class="choice-card"><input type="radio" name="people" value="7"><span><i data-lucide="bus-front"></i><strong>6+</strong><small>Van, SUV amplia o tres filas.</small></span></label>
+        </fieldset>
+
+        <fieldset class="quiz-step" data-field="daily_km" data-title="Recorrido diario" data-tip="Entre más kilómetros al día, más peso tienen consumo, confiabilidad y tipo de combustible.">
+          <legend>¿Cuántos kilómetros manejas al día?</legend>
+          <label class="choice-card"><input type="radio" name="daily_km" value="25"><span><i data-lucide="gauge"></i><strong>Menos de 25</strong><small>Recorridos cortos y urbanos.</small></span></label>
+          <label class="choice-card"><input type="radio" name="daily_km" value="50"><span><i data-lucide="gauge-circle"></i><strong>25-50</strong><small>Uso mixto típico de ciudad.</small></span></label>
+          <label class="choice-card"><input type="radio" name="daily_km" value="90"><span><i data-lucide="road"></i><strong>50-90</strong><small>Consumo y mantenimiento pesan más.</small></span></label>
+          <label class="choice-card"><input type="radio" name="daily_km" value="130"><span><i data-lucide="navigation"></i><strong>90+</strong><small>Híbrido, diésel o eléctrico ganan valor.</small></span></label>
+        </fieldset>
+
+        <fieldset class="quiz-step" data-field="charging_access" data-title="Carga EV" data-tip="Un eléctrico es más conveniente cuando puedes cargar en casa o trabajo. Si no, revisa electrolineras cercanas antes de decidir.">
+          <legend>Si compras eléctrico, ¿dónde cargarías?</legend>
+          <label class="choice-card"><input type="radio" name="charging_access" value="home"><span><i data-lucide="home"></i><strong>Casa o trabajo</strong><small>Mayor comodidad y costo controlado.</small></span></label>
+          <label class="choice-card"><input type="radio" name="charging_access" value="public"><span><i data-lucide="plug-zap"></i><strong>Carga pública</strong><small>Conviene revisar mapa de estaciones.</small></span></label>
+          <label class="choice-card"><input type="radio" name="charging_access" value="none"><span><i data-lucide="circle-help"></i><strong>No lo tengo claro</strong><small>El asesor será más conservador.</small></span></label>
+        </fieldset>
+
+        <fieldset class="quiz-step" data-field="priority" data-title="Prioridad" data-tip="Tu prioridad inclina el puntaje: ahorro, seguridad, familia, desempeño o confort. No hay respuesta mala, hay una decisión más honesta.">
+          <legend>¿Qué debe pesar más en la decisión?</legend>
+          <label class="choice-card"><input type="radio" name="priority" value="economy"><span><i data-lucide="piggy-bank"></i><strong>Ahorro</strong><small>Precio, consumo y mantenimiento.</small></span></label>
+          <label class="choice-card"><input type="radio" name="priority" value="safety"><span><i data-lucide="shield-check"></i><strong>Seguridad</strong><small>Protección y confianza.</small></span></label>
+          <label class="choice-card"><input type="radio" name="priority" value="family"><span><i data-lucide="baby"></i><strong>Familia</strong><small>Espacio y practicidad.</small></span></label>
+          <label class="choice-card"><input type="radio" name="priority" value="performance"><span><i data-lucide="zap"></i><strong>Desempeño</strong><small>Respuesta y manejo.</small></span></label>
+          <label class="choice-card"><input type="radio" name="priority" value="comfort"><span><i data-lucide="armchair"></i><strong>Confort</strong><small>Silencio, suavidad y equipamiento.</small></span></label>
+        </fieldset>
+
+        <fieldset class="quiz-step" data-field="preferred_type" data-title="Preferencia" data-tip="Si tienes preferencia fuerte la respetamos; si eres flexible, el inventario compite por conveniencia real.">
+          <legend>¿Tienes un tipo de carro en mente?</legend>
+          <label class="choice-card"><input type="radio" name="preferred_type" value="any"><span><i data-lucide="shuffle"></i><strong>Flexible</strong><small>Quiero la mejor opción global.</small></span></label>
+          <label class="choice-card"><input type="radio" name="preferred_type" value="suv"><span><i data-lucide="car-front"></i><strong>SUV</strong><small>Altura, espacio y versatilidad.</small></span></label>
+          <label class="choice-card"><input type="radio" name="preferred_type" value="sedan"><span><i data-lucide="car"></i><strong>Sedán</strong><small>Confort y eficiencia.</small></span></label>
+          <label class="choice-card"><input type="radio" name="preferred_type" value="hatchback"><span><i data-lucide="car-taxi-front"></i><strong>Hatchback</strong><small>Ciudad y facilidad de parqueo.</small></span></label>
+          <label class="choice-card"><input type="radio" name="preferred_type" value="pickup"><span><i data-lucide="truck"></i><strong>Pickup</strong><small>Trabajo, finca y carga.</small></span></label>
+          <label class="choice-card"><input type="radio" name="preferred_type" value="electric"><span><i data-lucide="plug"></i><strong>Eléctrico</strong><small>Cero emisiones locales.</small></span></label>
+        </fieldset>
+
+        <div class="advisor-tip">
+          <i data-lucide="lightbulb"></i>
+          <p id="advisorTip">Elige una opción para construir tu perfil.</p>
+        </div>
+
+        <div class="quiz-actions">
+          <button id="prevStep" class="btn secondary" type="button"><i data-lucide="arrow-left"></i> Anterior</button>
+          <button id="resetQuiz" class="btn quiet" type="button"><i data-lucide="rotate-ccw"></i> Reiniciar</button>
+          <button id="nextStep" class="btn primary" type="button">Siguiente <i data-lucide="arrow-right"></i></button>
+          <button id="submitQuiz" class="btn primary" type="submit" hidden>Ver recomendación <i data-lucide="sparkles"></i></button>
+        </div>
+      </form>
+    </div>
+
+    <aside class="advisor-preview">
+      <div class="preview-ring" style="--preview:0"><span id="previewPercent">0%</span></div>
+      <div class="preview-copy">
+        <span class="eyebrow">Vista previa</span>
+        <h2 id="previewTitle">Perfil en construcción</h2>
+        <p id="previewCopy">Elige una opción para empezar. La recomendación se vuelve más precisa a medida que avanzas.</p>
+      </div>
+      <div id="profileChips" class="preview-chips"><span>Sin respuestas todavía</span></div>
+      {% if featured %}
+        <div class="advisor-side-list">
+          <span class="eyebrow">Carros para comparar</span>
+          {% for item in featured[:3] %}
+            <a class="preview-listing" href="{{ url_for('detail', listing_id=item.id) }}">
+              <img src="{{ item.image_url }}" alt="{{ item.title }}">
+              <span><strong>{{ item.title }}</strong><small>{{ item.price_formatted }}</small></span>
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </aside>
+  </div>
+
+  <section id="advisorResults" class="advisor-results" aria-live="polite"></section>
+
+  <section class="advisor-explain" aria-label="Cómo trabaja CarTrust">
+    <article><i data-lucide="shield-check"></i><strong>Compra con menos ruido</strong><span>El asesor resume precio, uso, combustible, seguridad y perfil familiar en una lectura simple.</span></article>
+    <article><i data-lucide="gauge"></i><strong>Score comparable</strong><span>Después del test, cada ficha puede medirse contra el carro recomendado.</span></article>
+    <article><i data-lucide="plug-zap"></i><strong>Decisión EV más realista</strong><span>La respuesta de carga afecta la conveniencia de eléctricos e híbridos.</span></article>
+  </section>
+</section>
+{% endblock %}

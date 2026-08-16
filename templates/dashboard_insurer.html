@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Panel aseguradora | CarTrust{% endblock %}
+
+{% block content %}
+<section class="dashboard-page">
+  <div class="section-head">
+    <div><span class="eyebrow">Aseguradora</span><h1>Panel de productos</h1></div>
+    <a class="btn primary" href="{{ url_for('publish_insurance') }}">Publicar seguro</a>
+  </div>
+  <div class="account-strip">
+    <strong>{{ current_user.business_name }}</strong>
+    <span>{{ verification_labels.get(current_user.verification_status, 'En revision') }} · NIT {{ current_user.nit }} · {{ current_user.sfc_entity_type or 'Registro SFC/SUCIS pendiente' }}</span>
+  </div>
+  <div class="dashboard-grid">
+    <a class="action-card" href="{{ url_for('publish_insurance') }}"><i data-lucide="shield-plus"></i><strong>Nuevo producto</strong><span>Seguro, asistencia o garantia</span></a>
+    <a class="action-card" href="{{ url_for('payments') }}"><i data-lucide="credit-card"></i><strong>Pagos</strong><span>Metodos digitales</span></a>
+    <a class="action-card" href="{{ url_for('index') }}"><i data-lucide="car-front"></i><strong>Explorar mercado</strong><span>Ver carros activos</span></a>
+  </div>
+  <section class="panel-block">
+    <h2>Productos publicados</h2>
+    {% if products %}
+      <div class="mini-list">
+        {% for item in products %}
+          <div><strong>{{ item.name }}</strong><span>{{ item.category }} · {{ item.monthly_price|money }}/mes · {{ item.status }}</span></div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">Aun no tienes productos publicados.</p>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

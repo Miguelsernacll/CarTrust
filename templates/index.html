@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}CarTrust | Carros usados verificados{% endblock %}
+
+{% block content %}
+<section class="hero-market">
+  <div class="hero-copy">
+    <span class="eyebrow">Marketplace automotor de confianza</span>
+    <h1>Compra tu proximo carro usado con señales claras antes de visitar.</h1>
+    <p>Compara precio, ficha, concesionario, conveniencia 0-100 y puntos de carga EV desde una vitrina hecha para decidir rapido.</p>
+    <div class="hero-badges">
+      <span><i data-lucide="shield-check"></i> Aliados registrados</span>
+      <span><i data-lucide="sparkles"></i> Asesor inteligente</span>
+      <span><i data-lucide="credit-card"></i> Pagos digitales listos</span>
+    </div>
+    <form class="hero-search" action="{{ url_for('index') }}" method="get">
+      <input name="q" placeholder="Ej: SUV automatica, Toyota, electrico, Laureles">
+      <button class="btn primary" type="submit"><i data-lucide="search"></i> Buscar carros</button>
+    </form>
+    <div class="hero-actions">
+      <a class="btn secondary" href="{{ url_for('advisor') }}"><i data-lucide="sparkles"></i> Usar asesor</a>
+      <a class="btn quiet" href="#catalogo">Ver ofertas</a>
+      <a class="btn quiet" href="{{ url_for('register') }}">Crear cuenta</a>
+    </div>
+  </div>
+  <div class="hero-showcase">
+    {% for item in featured[:3] %}
+      <a class="showcase-card card-{{ loop.index }}" href="{{ url_for('detail', listing_id=item.id) }}">
+        <img src="{{ item.image_url }}" alt="{{ item.title }}">
+        <span>{{ item.title }}</span>
+        <strong>{{ item.price_formatted }}</strong>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="trust-strip">
+  <div><strong>{{ stats.vehicles }}</strong><span>carros activos</span></div>
+  <div><strong>{{ stats.verified }}</strong><span>verificados</span></div>
+  <div><strong>{{ stats.ev }}</strong><span>electricos</span></div>
+  <div><strong>{{ stats.refs }}</strong><span>referencias de precio</span></div>
+</section>
+
+<section class="shopping-lanes">
+  <a href="{{ url_for('index', body='SUV') }}"><i data-lucide="car-front"></i><span>SUV familiares</span></a>
+  <a href="{{ url_for('index', fuel='Electrico') }}"><i data-lucide="plug-zap"></i><span>Electricos</span></a>
+  <a href="{{ url_for('index', max_price='80000000') }}"><i data-lucide="wallet"></i><span>Hasta $80M</span></a>
+  <a href="{{ url_for('index', sort='price_desc') }}"><i data-lucide="gem"></i><span>Premium</span></a>
+  <a href="{{ url_for('charging') }}"><i data-lucide="map"></i><span>Electrolineras</span></a>
+</section>
+
+<section class="value-band">
+  <div>
+    <span class="eyebrow">Modelo de confianza</span>
+    <h2>Menos friccion para compradores serios y mejores leads para aliados.</h2>
+  </div>
+  <div class="value-grid">
+    <article><i data-lucide="shield-check"></i><h3>Aliados identificados</h3><p>Registro con datos comerciales, NIT, matricula mercantil y revision para sellos de confianza.</p></article>
+    <article><i data-lucide="badge-check"></i><h3>Compra guiada</h3><p>El test conecta necesidad, presupuesto y uso real con carros disponibles del inventario.</p></article>
+    <article><i data-lucide="route"></i><h3>Ecosistema rentable</h3><p>Preparado para seguros, pagos digitales, electrolineras, peritajes y referidos sin distraer la compra.</p></article>
+  </div>
+</section>
+
+<section id="catalogo" class="catalog-layout">
+  <aside class="filters">
+    <h2>Filtrar</h2>
+    <form id="marketFilters" action="{{ url_for('index') }}" method="get">
+      <label>Buscar<input name="q" value="{{ filters.get('q', '') }}" placeholder="Marca, modelo, barrio"></label>
+      <label>Precio minimo<input name="min_price" inputmode="numeric" value="{{ filters.get('min_price', '') }}" placeholder="40.000.000"></label>
+      <label>Precio maximo<input name="max_price" inputmode="numeric" value="{{ filters.get('max_price', '') }}" placeholder="1.000.000.000"></label>
+      <label>Combustible<select name="fuel"><option value="all">Todos</option>{% for fuel in ["Gasolina","Hibrido","Electrico","Diesel"] %}<option value="{{ fuel }}" {% if filters.get('fuel') == fuel %}selected{% endif %}>{{ fuel }}</option>{% endfor %}</select></label>
+      <label>Tipo<select name="body"><option value="all">Todos</option>{% for body in ["Hatchback","Sedan","SUV","Pickup","Van"] %}<option value="{{ body }}" {% if filters.get('body') == body %}selected{% endif %}>{{ body }}</option>{% endfor %}</select></label>
+      <label>Orden<select name="sort"><option value="newest">Recientes</option><option value="price_asc">Menor precio</option><option value="price_desc">Mayor precio</option><option value="year_desc">Modelo nuevo</option></select></label>
+      <button class="btn primary full" type="submit">Actualizar</button>
+    </form>
+  </aside>
+  <div class="catalog-main">
+    <div class="section-head">
+      <div><span class="eyebrow">Resultados</span><h2><span id="resultCount">{{ listings|length }}</span> carros para comparar</h2></div>
+      <a class="btn secondary" href="{{ url_for('advisor') }}">No se cual elegir</a>
+    </div>
+    <div id="listingGrid" class="listing-grid">
+      {% for item in listings %}
+        {% include "_listing_card.html" %}
+      {% else %}
+        <div class="empty">No encontramos carros con esos filtros.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

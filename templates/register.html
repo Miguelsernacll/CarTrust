@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Crear cuenta | CarTrust{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+  <div class="auth-copy">
+    <span class="eyebrow">Registro</span>
+    <h1>Tu cuenta empieza con datos verificables.</h1>
+    <p>CarTrust separa compradores, concesionarios y aseguradoras para proteger la experiencia y reducir publicaciones de baja confianza.</p>
+    <div class="trust-chips">
+      <span>Datos minimos</span>
+      <span>Validacion empresarial</span>
+      <span>Habeas data</span>
+    </div>
+  </div>
+  <form class="auth-card register-card" action="{{ url_for('register') }}" method="post">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <label class="wide">Tipo de cuenta
+      <select name="role" id="roleSelect" required>
+        <option value="customer" {% if form and form.get('role') == 'customer' %}selected{% endif %}>Particular / comprador</option>
+        <option value="dealer" {% if form and form.get('role') == 'dealer' %}selected{% endif %}>Concesionario</option>
+        <option value="insurer" {% if form and form.get('role') == 'insurer' %}selected{% endif %}>Aseguradora</option>
+      </select>
+    </label>
+    <div class="form-section-title wide">Datos de acceso</div>
+    <label>Nombre<input name="name" required value="{{ form.get('name', '') if form else '' }}" autocomplete="name"></label>
+    <label>Correo<input name="email" type="email" required value="{{ form.get('email', '') if form else '' }}" autocomplete="email"></label>
+    <label>Celular<input name="phone" value="{{ form.get('phone', '') if form else '' }}" autocomplete="tel"></label>
+    <label>Ciudad<input name="city" value="{{ form.get('city', 'Medellin') if form else 'Medellin' }}"></label>
+    <label class="wide" data-business-required="true">Direccion de contacto<input name="address" value="{{ form.get('address', '') if form else '' }}" autocomplete="street-address"></label>
+    <label class="customer-field wide">Cedula de ciudadania<input name="document_number" inputmode="numeric" value="{{ form.get('document_number', '') if form else '' }}" placeholder="Ej: 1037654321"></label>
+    <div class="form-section-title business-field wide">Verificacion empresarial</div>
+    <label class="business-field">Razon social<input name="business_name" value="{{ form.get('business_name', '') if form else '' }}" placeholder="Nombre legal de la empresa"></label>
+    <label class="business-field">NIT<input name="nit" value="{{ form.get('nit', '') if form else '' }}" placeholder="900000000-0"></label>
+    <label class="business-field">Matricula mercantil<input name="commercial_registry" value="{{ form.get('commercial_registry', '') if form else '' }}"></label>
+    <label class="business-field">Camara de Comercio<input name="chamber_of_commerce" value="{{ form.get('chamber_of_commerce', '') if form else '' }}" placeholder="Medellin para Antioquia"></label>
+    <label class="business-field">Representante legal<input name="legal_representative" value="{{ form.get('legal_representative', '') if form else '' }}"></label>
+    <label class="business-field">Cedula representante<input name="representative_document" inputmode="numeric" value="{{ form.get('representative_document', '') if form else '' }}"></label>
+    <label class="business-field wide">Tipo de actividad
+      <select name="business_kind">
+        <option value="">Selecciona actividad</option>
+        <option value="dealer_used">Compraventa/concesionario de usados</option>
+        <option value="insurance_company">Compania de seguros</option>
+        <option value="insurance_intermediary">Intermediario/corredor de seguros</option>
+      </select>
+    </label>
+    <div class="form-section-title insurer-field wide">Supervision aseguradora</div>
+    <label class="insurer-field">Tipo SFC/SUCIS
+      <select name="sfc_entity_type">
+        <option value="">Selecciona</option>
+        <option>Compania de seguros generales</option>
+        <option>Compania de seguros de vida</option>
+        <option>Cooperativa de seguros</option>
+        <option>Intermediario de seguros</option>
+        <option>Corredor de seguros</option>
+      </select>
+    </label>
+    <label class="insurer-field">Codigo o registro SFC/SUCIS<input name="sfc_code" value="{{ form.get('sfc_code', '') if form else '' }}"></label>
+    <label>Clave<input name="password" type="password" required minlength="8" autocomplete="new-password"></label>
+    <p class="legal-note business-field wide">La cuenta empresarial queda en revision legal. Para activar sello de verificado deben poder contrastarse RUT/NIT, matricula mercantil y representacion legal. En aseguradoras se revisa Superfinanciera o SUCIS.</p>
+    <label class="check wide"><input type="checkbox" name="privacy_acceptance" required><span>Autorizo el tratamiento de datos personales para crear cuenta, verificar identidad y gestionar solicitudes.</span></label>
+    <label class="check wide"><input type="checkbox" name="terms_acceptance" required><span>Acepto terminos, politica de privacidad y reglas de uso de CarTrust.</span></label>
+    <label class="check business-field wide"><input type="checkbox" name="compliance_acceptance"><span>Declaro que la informacion empresarial es veraz, vigente y autorizo su verificacion en registros publicos o autoridades competentes.</span></label>
+    <button class="btn primary full wide" type="submit">Crear cuenta</button>
+  </form>
+</section>
+{% endblock %}

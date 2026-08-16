@@ -1,0 +1,20 @@
+<article class="listing-card">
+  <a class="media" href="{{ url_for('detail', listing_id=item.id) }}">
+    <img src="{{ item.image_url }}" alt="{{ item.title }}" loading="lazy">
+    {% if item.verified %}<span class="badge">Verificado</span>{% endif %}
+  </a>
+  <div class="card-body">
+    <a class="card-title" href="{{ url_for('detail', listing_id=item.id) }}">{{ item.title }}</a>
+    <strong class="price">{{ item.price_formatted }}</strong>
+    <div class="specs">
+      <span>{{ item.year }}</span>
+      <span>{{ item.mileage_formatted }} km</span>
+      <span>{{ item.fuel_type }}</span>
+      <span>{{ item.transmission }}</span>
+    </div>
+    <div class="dealer-line">
+      <i data-lucide="{{ 'shield-check' if item.verified else 'badge-check' }}"></i>
+      {{ 'Concesionario verificado' if item.verified else 'Concesionario registrado' }} · {{ item.neighborhood }}
+    </div>
+  </div>
+</article>

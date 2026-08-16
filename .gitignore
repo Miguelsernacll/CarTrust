@@ -1,0 +1,8 @@
+.env
+.venv/
+.tools/
+__pycache__/
+*.pyc
+instance/*.sqlite3
+static/uploads/*
+!static/uploads/.gitkeep

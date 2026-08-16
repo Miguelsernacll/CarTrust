@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Publicar seguro | CarTrust{% endblock %}
+
+{% block content %}
+<section class="form-page">
+  <span class="eyebrow">Aseguradoras</span>
+  <h1>Publica un producto para compradores de carro.</h1>
+  <form class="publish-form" action="{{ url_for('publish_insurance') }}" method="post">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <label>Nombre del producto<input name="name" required placeholder="Seguro todo riesgo usado" value="{{ form.get('name', '') if form else '' }}"></label>
+    <label>Categoria<select name="category"><option>Seguro todo riesgo</option><option>SOAT</option><option>Asistencia vial</option><option>Garantia extendida</option></select></label>
+    <label>Valor mensual COP<input name="monthly_price" required inputmode="numeric" placeholder="180.000" value="{{ form.get('monthly_price', '') if form else '' }}"></label>
+    <label>Ciudad<input name="city" value="{{ form.get('city', 'Medellin') if form else 'Medellin' }}"></label>
+    <label class="wide">Cobertura<textarea name="coverage_summary" rows="4" required>{{ form.get('coverage_summary', '') if form else '' }}</textarea></label>
+    <button class="btn primary" type="submit">Publicar producto</button>
+  </form>
+</section>
+{% endblock %}

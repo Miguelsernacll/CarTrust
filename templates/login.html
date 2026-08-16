@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Entrar | CarTrust{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+  <div>
+    <span class="eyebrow">Cuenta CarTrust</span>
+    <h1>Entra para continuar.</h1>
+    <p>Tu panel cambia segun seas comprador, concesionario o aseguradora.</p>
+  </div>
+  <form class="auth-card" action="{{ url_for('login', next=request.args.get('next', '')) }}" method="post">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+    <label>Correo<input name="email" type="email" required value="{{ email or '' }}" autocomplete="email"></label>
+    <label>Clave<input name="password" type="password" required autocomplete="current-password"></label>
+    <button class="btn primary full" type="submit">Entrar</button>
+    <a class="btn secondary full" href="{{ url_for('register') }}">Crear cuenta</a>
+  </form>
+</section>
+{% endblock %}
