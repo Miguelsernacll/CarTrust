@@ -42,7 +42,7 @@
   <div><strong>{{ stats.vehicles }}</strong><span>carros activos</span></div>
   <div><strong>{{ stats.verified }}</strong><span>verificados</span></div>
   <div><strong>{{ stats.ev }}</strong><span>electricos</span></div>
-  <div><strong>{{ stats.refs }}</strong><span>referencias de precio</span></div>
+  <div><strong>{{ stats.popular }}</strong><span>referencias populares</span></div>
 </section>
 
 <section class="shopping-lanes">
@@ -54,7 +54,7 @@
 </section>
 
 <section class="section-switcher" aria-label="Apartados principales">
-  <a href="#apartado-confianza"><i data-lucide="shield-check"></i><strong>Confianza</strong><span>Solo aliados</span></a>
+  <a href="{{ url_for('trust') }}"><i data-lucide="shield-check"></i><strong>Confianza</strong><span>Solo aliados</span></a>
   <a href="{{ url_for('simulators') }}"><i data-lucide="credit-card"></i><strong>Simuladores</strong><span>Credito y costo</span></a>
   <a href="{{ url_for('chat_ai') }}"><i data-lucide="sparkles"></i><strong>Chat IA</strong><span>Sin test largo</span></a>
   <a href="#catalogo"><i data-lucide="car-front"></i><strong>Catalogo</strong><span>Ver ofertas</span></a>
@@ -74,6 +74,7 @@
       <h3>Confianza</h3>
       <p>Inventario de concesionarios de usados en Medellin, con datos comerciales y estado de verificacion visible.</p>
       <div class="card-tags"><span>NIT</span><span>Matricula</span><span>Leads trazables</span></div>
+      <a class="btn secondary full" href="{{ url_for('trust') }}">Ver confianza</a>
     </article>
     <article class="compact-card">
       <i data-lucide="route"></i>

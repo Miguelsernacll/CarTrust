@@ -5,17 +5,24 @@
 <section class="detail-page">
   <div class="detail-media"><img src="{{ image }}" alt="{{ listing.title }}"></div>
   <aside class="buy-panel">
-    <span class="badge inline">{{ 'Concesionario verificado' if listing.verified else 'Concesionario registrado' }}</span>
+    <div class="detail-badges">
+      <span class="badge inline">{{ listing.offer_label }}</span>
+      <span class="badge inline badge-secondary">{{ 'Concesionario verificado' if listing.verified else 'Concesionario registrado' }}</span>
+    </div>
     <h1>{{ listing.title }}</h1>
     <div class="detail-price">{{ listing.price|money }}</div>
     <p>{{ listing.neighborhood }} · {{ listing.year }} · {{ listing.mileage|number }} km</p>
+    <div class="referral-box">
+      <strong>{{ listing.offer_code }}</strong>
+      <span>Oferta gestionada por CarTrust con referido: {{ listing.dealer_referral }}.</span>
+    </div>
     <form action="{{ url_for('contact', listing_id=listing.id) }}" method="post" class="lead-form">
       <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
       <label>Nombre<input name="name" required></label>
       <label>Celular<input name="phone" required></label>
       <label>Mensaje<textarea name="message" rows="3">Hola, quiero informacion sobre {{ listing.title }}.</textarea></label>
       <label class="check"><input type="checkbox" name="privacy_acceptance" required><span>Acepto tratamiento de datos para ser contactado.</span></label>
-      <button class="btn primary full" type="submit">Contactar concesionario</button>
+      <button class="btn primary full" type="submit">Contactar referido</button>
       <a class="btn secondary full" href="{{ url_for('payments') }}">Crear pago digital</a>
     </form>
   </aside>

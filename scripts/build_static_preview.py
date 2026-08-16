@@ -94,6 +94,7 @@ def main():
     )
     html = html.replace('href="/"', 'href="http://127.0.0.1:5057/"')
     html = html.replace('action="/"', 'action="http://127.0.0.1:5057/"')
+    html = html.replace('href="/confianza"', 'href="http://127.0.0.1:5057/confianza"')
     html = html.replace('href="/asesor"', 'href="http://127.0.0.1:5057/asesor"')
     html = html.replace('href="/carga"', 'href="http://127.0.0.1:5057/carga"')
     html = html.replace('href="/referencias"', 'href="http://127.0.0.1:5057/referencias"')

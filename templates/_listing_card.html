@@ -1,9 +1,11 @@
 <article class="listing-card">
   <a class="media" href="{{ url_for('detail', listing_id=item.id) }}">
     <img src="{{ item.image_url }}" alt="{{ item.title }}" loading="lazy">
-    {% if item.verified %}<span class="badge">Verificado</span>{% endif %}
+    <span class="badge">{{ item.offer_label or 'Oferta CarTrust' }}</span>
+    {% if item.verified %}<span class="badge badge-secondary">Verificado</span>{% endif %}
   </a>
   <div class="card-body">
+    <div class="offer-kicker"><span>{{ item.offer_code }}</span><small>Referido aliado</small></div>
     <a class="card-title" href="{{ url_for('detail', listing_id=item.id) }}">{{ item.title }}</a>
     <strong class="price">{{ item.price_formatted }}</strong>
     <div class="specs">
@@ -14,7 +16,7 @@
     </div>
     <div class="dealer-line">
       <i data-lucide="{{ 'shield-check' if item.verified else 'badge-check' }}"></i>
-      {{ 'Concesionario verificado' if item.verified else 'Concesionario registrado' }} · {{ item.neighborhood }}
+      Referido: {{ item.dealer_referral }} · {{ item.neighborhood }}
     </div>
   </div>
 </article>

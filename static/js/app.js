@@ -242,17 +242,22 @@ function esc(value) {
 }
 
 function card(item) {
+  const offerLabel = item.offer_label || "Oferta CarTrust";
+  const offerCode = item.offer_code || `CT-MDE-${String(item.id).padStart(5, "0")}`;
+  const referred = item.dealer_referral || "Concesionario aliado";
   return `
     <article class="listing-card">
       <a class="media" href="/listing/${item.id}">
         <img src="${esc(item.image_url)}" alt="${esc(item.title)}" loading="lazy">
-        ${item.verified ? '<span class="badge">Verificado</span>' : ""}
+        <span class="badge">${esc(offerLabel)}</span>
+        ${item.verified ? '<span class="badge badge-secondary">Verificado</span>' : ""}
       </a>
       <div class="card-body">
+        <div class="offer-kicker"><span>${esc(offerCode)}</span><small>Referido aliado</small></div>
         <a class="card-title" href="/listing/${item.id}">${esc(item.title)}</a>
         <strong class="price">${item.price_formatted || peso.format(item.price)}</strong>
         <div class="specs"><span>${item.year}</span><span>${item.mileage_formatted} km</span><span>${esc(item.fuel_type)}</span><span>${esc(item.transmission)}</span></div>
-        <div class="dealer-line"><i data-lucide="${item.verified ? "shield-check" : "badge-check"}"></i> ${item.verified ? "Concesionario verificado" : "Concesionario registrado"} · ${esc(item.neighborhood)}</div>
+        <div class="dealer-line"><i data-lucide="${item.verified ? "shield-check" : "badge-check"}"></i> Referido: ${esc(referred)} · ${esc(item.neighborhood)}</div>
       </div>
     </article>`;
 }

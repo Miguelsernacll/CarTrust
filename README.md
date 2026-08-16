@@ -67,7 +67,7 @@ Conecta una pasarela real como Wompi, PayU o Mercado Pago, activa HTTPS, complet
 - Concesionario: registra razon social, NIT, matricula mercantil, camara de comercio, representante legal y datos de contacto; publica carros usados. En el modo actual solo se aceptan concesionarios de Medellin.
 - Aseguradora: registra razon social, NIT, representante legal y codigo/registro SFC o SUCIS; publica productos como seguro, asistencia vial o garantia extendida.
 
-Rutas principales: `/registro`, `/login`, `/cuenta`, `/publicar`, `/aseguradora/productos/nuevo` y `/pagos`.
+Rutas principales: `/confianza`, `/registro`, `/login`, `/cuenta`, `/publicar`, `/aseguradora/productos/nuevo` y `/pagos`.
 
 Las cuentas empresariales quedan con estado `pending_review` hasta validacion externa. El sello "verificado" debe activarse solo despues de revisar RUT/registro mercantil o supervision SFC/SUCIS.
 
@@ -79,6 +79,7 @@ El flujo de `/pagos` crea intenciones de pago y evita capturar datos sensibles. 
 
 - Del HTML de navegacion: hero claro, buscador protagonista, KPIs, flujo sin registro, asesor y confianza visible.
 - Del Pages: compra usada en Colombia como decision financiera sensible, desconfianza estructural, red de aliados, servicios conexos, fidelizacion/referidos y seguridad/monitoreo como crecimiento futuro.
+- De la evolucion CarTrust: `/confianza` incluye 1000 referencias internas de vehiculos populares en Colombia y muestra las publicaciones activas como Oferta CarTrust con concesionario aliado referido.
 
 ## Asesor inteligente
 

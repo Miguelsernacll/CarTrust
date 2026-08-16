@@ -286,6 +286,151 @@ REFERENCE_ROWS = [
     ("Referencia propia", "Toyota Land Cruiser 300", "Toyota", "Land Cruiser 300", 2024, 620000000, 790000000, 980000000, 3),
 ]
 
+REFERRED_DEALERS = [
+    ("Aliado CarTrust Laureles Usados", "+57 300 111 0101", "CT-MDE-001"),
+    ("Aliado CarTrust Poblado Autos", "+57 300 111 0102", "CT-MDE-002"),
+    ("Aliado CarTrust Belen Motors", "+57 300 111 0103", "CT-MDE-003"),
+    ("Aliado CarTrust Itagui Usados", "+57 300 111 0104", "CT-MDE-004"),
+    ("Aliado CarTrust Sabaneta 4x4", "+57 300 111 0105", "CT-MDE-005"),
+    ("Aliado CarTrust Palmas Premium", "+57 300 111 0106", "CT-MDE-006"),
+    ("Aliado CarTrust Envigado EV", "+57 300 111 0107", "CT-MDE-007"),
+    ("Aliado CarTrust Medellin Seleccion", "+57 300 111 0108", "CT-MDE-008"),
+]
+
+POPULAR_MODEL_FAMILIES = [
+    ("Kia", "K3", "Sedan", "Gasolina", 2024),
+    ("Kia", "Picanto", "Hatchback", "Gasolina", 2007),
+    ("Kia", "Sportage", "SUV", "Gasolina", 2007),
+    ("Kia", "Stonic", "SUV", "Gasolina", 2018),
+    ("Kia", "Sonet", "SUV", "Gasolina", 2021),
+    ("Renault", "Duster", "SUV", "Gasolina", 2013),
+    ("Renault", "Logan", "Sedan", "Gasolina", 2007),
+    ("Renault", "Kardian", "SUV", "Gasolina", 2024),
+    ("Renault", "Kwid", "Hatchback", "Gasolina", 2019),
+    ("Renault", "Arkana", "SUV", "Hibrido", 2022),
+    ("Toyota", "Corolla Cross", "SUV", "Hibrido", 2021),
+    ("Toyota", "Land Cruiser Prado", "SUV", "Diesel", 2007),
+    ("Toyota", "Hilux", "Pickup", "Diesel", 2007),
+    ("Toyota", "Fortuner", "SUV", "Diesel", 2007),
+    ("Toyota", "Yaris Cross", "SUV", "Hibrido", 2024),
+    ("Mazda", "CX-30", "SUV", "Gasolina", 2020),
+    ("Mazda", "Mazda 2", "Hatchback", "Gasolina", 2007),
+    ("Mazda", "CX-5", "SUV", "Gasolina", 2013),
+    ("Mazda", "CX-50", "SUV", "Hibrido", 2025),
+    ("Mazda", "Mazda 3", "Sedan", "Gasolina", 2007),
+    ("Chevrolet", "Onix", "Sedan", "Gasolina", 2020),
+    ("Chevrolet", "Tracker", "SUV", "Gasolina", 2013),
+    ("Chevrolet", "Spark", "Hatchback", "Gasolina", 2007),
+    ("Chevrolet", "NHR", "Camion", "Diesel", 2007),
+    ("Chevrolet", "Colorado", "Pickup", "Diesel", 2007),
+    ("Suzuki", "Swift", "Hatchback", "Gasolina", 2007),
+    ("Suzuki", "Dzire", "Sedan", "Gasolina", 2017),
+    ("Suzuki", "Fronx", "SUV", "Gasolina", 2024),
+    ("Suzuki", "S-Cross", "SUV", "Gasolina", 2014),
+    ("Suzuki", "Jimny", "SUV", "Gasolina", 2007),
+    ("Nissan", "Frontier", "Pickup", "Diesel", 2007),
+    ("Nissan", "X-Trail", "SUV", "Hibrido", 2007),
+    ("Nissan", "Versa", "Sedan", "Gasolina", 2012),
+    ("Nissan", "Kicks", "SUV", "Gasolina", 2017),
+    ("Nissan", "Qashqai", "SUV", "Gasolina", 2015),
+    ("Hyundai", "Kona", "SUV", "Hibrido", 2018),
+    ("Hyundai", "Tucson", "SUV", "Gasolina", 2007),
+    ("Hyundai", "Grand i10", "Hatchback", "Gasolina", 2014),
+    ("Hyundai", "Venue", "SUV", "Gasolina", 2020),
+    ("Hyundai", "Creta", "SUV", "Gasolina", 2016),
+    ("Volkswagen", "Polo", "Hatchback", "Gasolina", 2007),
+    ("Volkswagen", "T-Cross", "SUV", "Gasolina", 2020),
+    ("Volkswagen", "Nivus", "SUV", "Gasolina", 2021),
+    ("Volkswagen", "Taos", "SUV", "Gasolina", 2022),
+    ("BYD", "Yuan Up", "SUV", "Electrico", 2025),
+    ("BYD", "Seagull", "Hatchback", "Electrico", 2024),
+    ("BYD", "Song Plus", "SUV", "Hibrido", 2023),
+    ("BYD", "Yuan Plus", "SUV", "Electrico", 2023),
+    ("BYD", "Sealion 7", "SUV", "Electrico", 2025),
+    ("Ford", "Ranger", "Pickup", "Diesel", 2007),
+]
+
+POPULAR_REFERENCE_VARIANTS = [
+    "Entrada",
+    "Confort",
+    "Automatica",
+    "Full equipo",
+    "Premium",
+    "Familiar",
+    "Urbana",
+    "Carretera",
+    "Alta reventa",
+    "Bajo consumo",
+]
+
+POPULAR_SOURCE_LINKS = [
+    {
+        "label": "ANDI/FENALCO",
+        "url": "https://www.andi.com.co/Home/Noticia/18059-andi-y-fenalco-destacan-el-crecimiento",
+        "note": "Tendencias de matriculas, crecimiento del mercado y adopcion electrificada.",
+    },
+    {
+        "label": "Fenalco Automotor",
+        "url": "https://www.fenalco.com.co/blog/gremial-4/informe-del-sector-automotor-a-marzo-2026-8751",
+        "note": "Informes mensuales del sector automotor colombiano.",
+    },
+    {
+        "label": "ANDEMOS",
+        "url": "https://www.andemos.org/",
+        "note": "Gremio automotor usado como referencia sectorial para marcas y segmentos.",
+    },
+]
+
+
+def build_popular_vehicle_rows():
+    rows = []
+    rank = 1
+    for cycle in range(20):
+        for family_index, (make, model, body, fuel, start_year) in enumerate(POPULAR_MODEL_FAMILIES):
+            year = max(start_year, 2026 - cycle)
+            variant = POPULAR_REFERENCE_VARIANTS[(cycle + family_index) % len(POPULAR_REFERENCE_VARIANTS)]
+            score = max(1, 1001 - rank)
+            rows.append(
+                (
+                    rank,
+                    make,
+                    model,
+                    year,
+                    f"{make} {model} {variant} {year}",
+                    body,
+                    fuel,
+                    score,
+                    "Referencia CarTrust basada en familias de alto volumen reportadas por el sector automotor; no es ranking oficial individual 1-1000.",
+                    "ANDI/FENALCO, Fenalco Automotor y ANDEMOS",
+                )
+            )
+            rank += 1
+            if rank > 1000:
+                return rows
+    return rows
+
+
+def assign_seed_referrals(conn):
+    rows = conn.execute(
+        """
+        SELECT id
+        FROM listings
+        WHERE dealer_nit = '900000000-0'
+           OR dealer_name = 'Concesionario verificado Medellin'
+        ORDER BY id
+        """
+    ).fetchall()
+    for index, row in enumerate(rows):
+        dealer_name, dealer_phone, dealer_nit = REFERRED_DEALERS[index % len(REFERRED_DEALERS)]
+        conn.execute(
+            """
+            UPDATE listings
+            SET dealer_name = ?, dealer_phone = ?, dealer_nit = ?, verified = 1
+            WHERE id = ?
+            """,
+            (dealer_name, dealer_phone, dealer_nit, row["id"]),
+        )
+
 
 def ensure_columns(conn, table, columns):
     existing = {row["name"] for row in conn.execute(f"PRAGMA table_info({table})")}
@@ -325,6 +470,20 @@ def init_db():
             source TEXT NOT NULL, title TEXT NOT NULL, make TEXT, model TEXT, year INTEGER,
             min_price INTEGER, avg_price INTEGER, max_price INTEGER, sample_size INTEGER DEFAULT 0,
             source_url TEXT, license_note TEXT, updated_at TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS popular_vehicles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            rank_position INTEGER NOT NULL,
+            make TEXT NOT NULL,
+            model TEXT NOT NULL,
+            year INTEGER NOT NULL,
+            title TEXT NOT NULL,
+            body_type TEXT,
+            fuel_type TEXT,
+            popularity_score INTEGER DEFAULT 0,
+            source_note TEXT,
+            source_label TEXT,
+            created_at TEXT NOT NULL
         );
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -380,6 +539,8 @@ def init_db():
         CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
         CREATE INDEX IF NOT EXISTS idx_payments_user ON payments(user_id);
         CREATE INDEX IF NOT EXISTS idx_insurer_products_owner ON insurer_products(insurer_id);
+        CREATE INDEX IF NOT EXISTS idx_popular_vehicles_rank ON popular_vehicles(rank_position);
+        CREATE INDEX IF NOT EXISTS idx_popular_vehicles_make_model ON popular_vehicles(make, model);
         """
     )
     ensure_columns(conn, "users", {
@@ -428,6 +589,21 @@ def init_db():
                 """,
                 (*row, now),
             )
+    assign_seed_referrals(conn)
+    popular_total = conn.execute("SELECT COUNT(*) total FROM popular_vehicles").fetchone()["total"]
+    if popular_total != 1000:
+        now = utc_iso()
+        conn.execute("DELETE FROM popular_vehicles")
+        for row in build_popular_vehicle_rows():
+            conn.execute(
+                """
+                INSERT INTO popular_vehicles
+                (rank_position, make, model, year, title, body_type, fuel_type,
+                 popularity_score, source_note, source_label, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (*row, now),
+            )
     conn.commit()
 
 
@@ -444,7 +620,25 @@ def serialize(row):
     item["image_url"] = listing_image(row["id"])
     item["price_formatted"] = money(row["price"])
     item["mileage_formatted"] = number(row["mileage"])
+    item["offer_label"] = "Oferta CarTrust"
+    item["offer_code"] = f"CT-MDE-{row['id']:05d}"
+    item["dealer_referral"] = row["dealer_name"] or "Concesionario aliado"
     return item
+
+
+def popular_vehicle_rows(limit=90, q=""):
+    clauses, values = [], []
+    query = clean_text(q)
+    if query:
+        clauses.append("(title LIKE ? OR make LIKE ? OR model LIKE ? OR body_type LIKE ? OR fuel_type LIKE ?)")
+        like = f"%{query}%"
+        values.extend([like, like, like, like, like])
+    sql = "SELECT * FROM popular_vehicles"
+    if clauses:
+        sql += f" WHERE {' AND '.join(clauses)}"
+    sql += " ORDER BY rank_position ASC LIMIT ?"
+    values.append(limit)
+    return [dict(row) for row in db().execute(sql, values).fetchall()]
 
 
 def query_listings(args=None, limit=None):
@@ -957,8 +1151,30 @@ def index():
         "verified": db().execute("SELECT COUNT(*) total FROM listings WHERE verified=1").fetchone()["total"],
         "ev": db().execute("SELECT COUNT(*) total FROM listings WHERE LOWER(fuel_type)='electrico'").fetchone()["total"],
         "refs": db().execute("SELECT COUNT(*) total FROM vehicle_reference").fetchone()["total"],
+        "popular": db().execute("SELECT COUNT(*) total FROM popular_vehicles").fetchone()["total"],
+        "dealers": db().execute("SELECT COUNT(DISTINCT dealer_nit) total FROM listings WHERE status='active'").fetchone()["total"],
     }
     return render_template("index.html", listings=listings, featured=featured, stats=stats, filters=request.args)
+
+
+@app.route("/confianza")
+def trust():
+    q = clean_text(request.args.get("q"))
+    offers = [serialize(row) for row in query_listings({"sort": "year_desc"}, limit=12)]
+    stats = {
+        "popular": db().execute("SELECT COUNT(*) total FROM popular_vehicles").fetchone()["total"],
+        "offers": db().execute("SELECT COUNT(*) total FROM listings WHERE status='active'").fetchone()["total"],
+        "dealers": db().execute("SELECT COUNT(DISTINCT dealer_nit) total FROM listings WHERE status='active'").fetchone()["total"],
+        "verified": db().execute("SELECT COUNT(*) total FROM listings WHERE verified=1").fetchone()["total"],
+    }
+    return render_template(
+        "trust.html",
+        q=q,
+        popular=popular_vehicle_rows(96, q),
+        offers=offers,
+        stats=stats,
+        sources=POPULAR_SOURCE_LINKS,
+    )
 
 
 @app.route("/listing/<int:listing_id>")
@@ -967,7 +1183,8 @@ def detail(listing_id):
     if not row:
         return render_template("404.html"), 404
     related = [serialize(item) for item in query_listings({"body": row["body_type"]}, limit=4) if item["id"] != listing_id][:3]
-    return render_template("detail.html", listing=dict(row), image=listing_image(listing_id), related=related)
+    listing = serialize(row)
+    return render_template("detail.html", listing=listing, image=listing["image_url"], related=related)
 
 
 @app.route("/publicar", methods=["GET", "POST"])
